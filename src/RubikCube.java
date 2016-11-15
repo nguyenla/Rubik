@@ -53,9 +53,37 @@ public class RubikCube {
 		return res.toString();
 	}
 
-	public static String[] move(String s1, String s2, String s3, String s4, int pos1, int pos2, int pos3) {
+	public static String replaceAtIndex(String original, int index, char replacement) {
+		return original.substring(0, index) + replacement + original.substring(index + 1);
+	}
+	
+	// A very sophisticated method to execute a simple task
+	public static String[] permute(String s1, String s2, String s3, String s4,
+									int loc1, int loc2, int loc3, int loc4) {
 		String[] res = new String[4];
+		int a1 = loc1 / 100;	int a2 = (loc1 / 10) % 10;	int a3 = loc1 % 10;
+		int b1 = loc2 / 100;	int b2 = (loc2 / 10) % 10;	int b3 = loc2 % 10; 
+		int c1 = loc3 / 100;	int c2 = (loc3 / 10) % 10;	int c3 = loc3 % 10; 
+		int d1 = loc4 / 100;	int d2 = (loc4 / 10) % 10;	int d3 = loc4 % 10; 
 
+		char temp1 = s1.charAt(a1);
+		char temp2 = s1.charAt(a2);
+		char temp3 = s1.charAt(a3);
+		s1 = replaceAtIndex(s1, a1, s4.charAt(d1));
+		s1 = replaceAtIndex(s1, a2, s4.charAt(d2));
+		s1 = replaceAtIndex(s1, a3, s4.charAt(d3));
+		
+		s4 = replaceAtIndex(s4, d1, s3.charAt(c1));
+		s4 = replaceAtIndex(s4, d2, s3.charAt(c2));
+		s4 = replaceAtIndex(s4, d3, s3.charAt(c3));
+		
+		s3 = replaceAtIndex(s3, c1, s2.charAt(b1));
+		s3 = replaceAtIndex(s3, c2, s2.charAt(b2));
+		s3 = replaceAtIndex(s3, c3, s2.charAt(b3));
+		
+		s2 = replaceAtIndex(s2, b1, temp1);
+		s2 = replaceAtIndex(s2, b2, temp2);
+		s2 = replaceAtIndex(s2, b3, temp3);
 		return res;
 	}
 
@@ -151,9 +179,9 @@ public class RubikCube {
 		System.out.println("    " + up.substring(6, 9));
 		System.out.println();
 
-		System.out.println(left.substring(0, 3) + " " + front.substring(0, 3) + " " + right.substring(0, 3));
-		System.out.println(left.substring(3, 6) + " " + front.substring(3, 6) + " " + right.substring(3, 6));
-		System.out.println(left.substring(6, 9) + " " + front.substring(6, 9) + " " + right.substring(6, 9));
+		System.out.println(left.substring(0, 3) + " " + front.substring(0, 3) + " " + right.substring(0, 3) + " " + back.substring(0, 3));
+		System.out.println(left.substring(3, 6) + " " + front.substring(3, 6) + " " + right.substring(3, 6) + " " + back.substring(3, 6));
+		System.out.println(left.substring(6, 9) + " " + front.substring(6, 9) + " " + right.substring(6, 9) + " " + back.substring(6, 9));
 		System.out.println();
 
 		System.out.println("    " + down.substring(0, 3));
@@ -161,10 +189,10 @@ public class RubikCube {
 		System.out.println("    " + down.substring(6, 9));
 		System.out.println();
 
-		System.out.println("    " + back.substring(0, 3));
-		System.out.println("    " + back.substring(3, 6));
-		System.out.println("    " + back.substring(6, 9));
-		System.out.println();
+//		System.out.println("    " + back.substring(0, 3));
+//		System.out.println("    " + back.substring(3, 6));
+//		System.out.println("    " + back.substring(6, 9));
+//		System.out.println();
 	}
 
 	// Main method to run driver tests
@@ -172,6 +200,7 @@ public class RubikCube {
 		// Test case for rotateUpClockwise
 		String initial = "uuuuuuuuulllllllllfffffffffrrrrrrrrrdddddddddbbbbbbbbb";
 		RubikCube cube = new RubikCube(initial);
+		cube.rotateUpAntiClockwise();
 		cube.rotateDownAntiClockwise();
 		//		cube.rotateUpAntiClockwise();
 		//		cube.rotateUpAntiClockwise();
