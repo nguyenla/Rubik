@@ -95,6 +95,38 @@ public class Simple_solver {
 		}
 	}
 	
+	// Final step
+	public void bottom_layer() {
+		// While the cube is not solved
+		while (!cube.check_square("front", 9) || !cube.check_square("left", 9) || !cube.check_square("right", 9) || !cube.check_square("back", 9)) {
+			// set up the desired location
+			while (cube.check_square("front", 9)) {
+				cube.rotateCubeLeft();
+			}
+			System.out.println("Before move:");
+			printState();
+			while (!cube.check_square("front", 9)) {
+				cube.rotateRightAntiClockwise();
+				cube.rotateDownAntiClockwise();
+				cube.rotateDownAntiClockwise();
+				cube.rotateRightClockwise();
+				cube.rotateDownClockwise();
+				cube.rotateRightAntiClockwise();
+				cube.rotateDownClockwise();
+				cube.rotateRightClockwise();
+				
+				cube.rotateLeftClockwise();
+				cube.rotateDownAntiClockwise();
+				cube.rotateDownAntiClockwise();
+				cube.rotateLeftAntiClockwise();
+				cube.rotateDownAntiClockwise();
+				cube.rotateLeftClockwise();
+				cube.rotateDownAntiClockwise();
+				cube.rotateLeftAntiClockwise();
+			}
+		}
+	}
+	
 	// Print the current state of the rubik cube
 	public void printState() {
 		cube.print();
@@ -107,7 +139,7 @@ public class Simple_solver {
 		Simple_solver solver2 = new Simple_solver(state);
 		solver2.printState();
 		solver2.bottom_layer_corner_location();
+		solver2.bottom_layer();
 		solver2.printState();
 	}
-	
 }
