@@ -1,4 +1,5 @@
-import java.util.*;
+/// This class represents a Rubik cube with six fields representing six faces
+/// and 12 methods corresponding to 12 rotations to obtain a different state.
 
 public class RubikCube {
 	private String up;
@@ -23,6 +24,7 @@ public class RubikCube {
 		}
 	}
 
+	// return a string that contains the current state of the Rubik cube
 	public String getState() {
 		return up + left + front + right + down + back;
 	}
@@ -213,6 +215,7 @@ public class RubikCube {
 	}
 
 	// Rotate back clockwise
+	// U (321) -> L (147) -> D (789) -> R (963) -> U (321)
 	public void rotateBackClockwise() {
 		back = rotateClockwise(back);
 		String[] temp = permute(up, left, down, right, 321, 147, 789, 963);
@@ -223,6 +226,7 @@ public class RubikCube {
 	}
 
 	// Rotate back anti-clockwise
+	// U (321) -> R (963) -> D (789) -> L (147) -> U (321)
 	public void rotateBackAntiClockwise() {
 		back = rotateAntiClockwise(back);
 		String[] temp = permute(up, right, down, left, 321, 963, 789, 147);
@@ -249,16 +253,10 @@ public class RubikCube {
 		System.out.println("    " + down.substring(3, 6));
 		System.out.println("    " + down.substring(6, 9));
 		System.out.println();
-
-		//		System.out.println("    " + back.substring(0, 3));
-		//		System.out.println("    " + back.substring(3, 6));
-		//		System.out.println("    " + back.substring(6, 9));
-		//		System.out.println();
 	}
 
 	// Main method to run driver tests
-	public static void main(String[] args) {	
-		// Test case for rotateUpClockwise
+	public static void main(String[] args) {
 		String initial = "uuuuuuuuulllllllllfffffffffrrrrrrrrrdddddddddbbbbbbbbb";
 		RubikCube cube = new RubikCube(initial);
 		cube.rotateDownClockwise();
