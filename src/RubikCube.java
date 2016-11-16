@@ -56,15 +56,15 @@ public class RubikCube {
 	public static String replaceAtIndex(String original, int index, char replacement) {
 		return original.substring(0, index) + replacement + original.substring(index + 1);
 	}
-	
+
 	// A very sophisticated method to execute a simple task
 	public static String[] permute(String s1, String s2, String s3, String s4,
-									int loc1, int loc2, int loc3, int loc4) {
+			int loc1, int loc2, int loc3, int loc4) {
 		String[] res = new String[4];
-		int a1 = loc1 / 100;	int a2 = (loc1 / 10) % 10;	int a3 = loc1 % 10;
-		int b1 = loc2 / 100;	int b2 = (loc2 / 10) % 10;	int b3 = loc2 % 10; 
-		int c1 = loc3 / 100;	int c2 = (loc3 / 10) % 10;	int c3 = loc3 % 10; 
-		int d1 = loc4 / 100;	int d2 = (loc4 / 10) % 10;	int d3 = loc4 % 10; 
+		int a1 = loc1 / 100 - 1;	int a2 = (loc1 / 10) % 10 - 1;	int a3 = loc1 % 10 - 1;
+		int b1 = loc2 / 100 - 1;	int b2 = (loc2 / 10) % 10 - 1;	int b3 = loc2 % 10 - 1; 
+		int c1 = loc3 / 100 - 1;	int c2 = (loc3 / 10) % 10 - 1;	int c3 = loc3 % 10 - 1; 
+		int d1 = loc4 / 100 - 1;	int d2 = (loc4 / 10) % 10 - 1;	int d3 = loc4 % 10 - 1; 
 
 		char temp1 = s1.charAt(a1);
 		char temp2 = s1.charAt(a2);
@@ -72,18 +72,23 @@ public class RubikCube {
 		s1 = replaceAtIndex(s1, a1, s4.charAt(d1));
 		s1 = replaceAtIndex(s1, a2, s4.charAt(d2));
 		s1 = replaceAtIndex(s1, a3, s4.charAt(d3));
-		
+
 		s4 = replaceAtIndex(s4, d1, s3.charAt(c1));
 		s4 = replaceAtIndex(s4, d2, s3.charAt(c2));
 		s4 = replaceAtIndex(s4, d3, s3.charAt(c3));
-		
+
 		s3 = replaceAtIndex(s3, c1, s2.charAt(b1));
 		s3 = replaceAtIndex(s3, c2, s2.charAt(b2));
 		s3 = replaceAtIndex(s3, c3, s2.charAt(b3));
-		
+
 		s2 = replaceAtIndex(s2, b1, temp1);
 		s2 = replaceAtIndex(s2, b2, temp2);
 		s2 = replaceAtIndex(s2, b3, temp3);
+
+		res[0] = s1;
+		res[1] = s2;
+		res[2] = s3;
+		res[3] = s4;
 		return res;
 	}
 
@@ -144,22 +149,48 @@ public class RubikCube {
 
 	}
 
-	// Rotate right
+	// Rotate right clockwise
+	// U (963) -> B (147) -> D (963) -> F (963) -> U (963)
 	public void rotateRightClockwise() {
-
+		right = rotateClockwise(right);
+		String[] temp = permute(up, back, down, front, 963, 147, 963, 963);
+		up = temp[0];
+		back = temp[1];
+		down = temp[2];
+		front = temp[3];
 	}
 
+	// Rotate right anti-clockwise
+	// U (963) -> F (963) -> D (963) -> B (147) -> U (963)
 	public void rotateRightAntiClockwise() {
-
+		right = rotateAntiClockwise(right);
+		String[] temp = permute(up, front, down, back, 963, 963, 963, 147);
+		up = temp[0];
+		front = temp[1];
+		down = temp[2];
+		back = temp[3];
 	}
 
-	// Rotate front
+	// Rotate front clockwise
+	// L (963) -> U (789) -> R (147) -> D (321) -> L (963)
 	public void rotateFrontClockwise() {
-
+		front = rotateClockwise(front);
+		String[] temp = permute(left, up, right, down, 963, 789, 147, 321);
+		left = temp[0];
+		up = temp[1];
+		right = temp[2];
+		down = temp[3];
 	}
 
+	// Rotate front anti-clockwise
+	// L (963) -> D (321) -> R (147) -> U (789) -> L (963)
 	public void rotateFrontAntiClockwise() {
-
+		front = rotateAntiClockwise(front);
+		String[] temp = permute(left, down, right, up, 963, 321, 147, 789);
+		left = temp[0];
+		down = temp[1];
+		right = temp[2];
+		up = temp[3];
 	}
 
 	// Rotate back
@@ -189,10 +220,10 @@ public class RubikCube {
 		System.out.println("    " + down.substring(6, 9));
 		System.out.println();
 
-//		System.out.println("    " + back.substring(0, 3));
-//		System.out.println("    " + back.substring(3, 6));
-//		System.out.println("    " + back.substring(6, 9));
-//		System.out.println();
+		//		System.out.println("    " + back.substring(0, 3));
+		//		System.out.println("    " + back.substring(3, 6));
+		//		System.out.println("    " + back.substring(6, 9));
+		//		System.out.println();
 	}
 
 	// Main method to run driver tests
@@ -200,8 +231,9 @@ public class RubikCube {
 		// Test case for rotateUpClockwise
 		String initial = "uuuuuuuuulllllllllfffffffffrrrrrrrrrdddddddddbbbbbbbbb";
 		RubikCube cube = new RubikCube(initial);
-		cube.rotateUpAntiClockwise();
-		cube.rotateDownAntiClockwise();
+		cube.rotateRightAntiClockwise();
+		//		cube.rotateUpAntiClockwise();
+		//		cube.rotateDownAntiClockwise();
 		//		cube.rotateUpAntiClockwise();
 		//		cube.rotateUpAntiClockwise();
 		//		cube.rotateUpAntiClockwise();
