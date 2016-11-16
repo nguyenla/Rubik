@@ -23,6 +23,10 @@ public class RubikCube {
 		}
 	}
 
+	public String getState() {
+		return up + left + front + right + down + back;
+	}
+	
 	// Helper method: Rotate clockwise
 	public static String rotateClockwise(String state) {
 		StringBuilder res = new StringBuilder("");
@@ -58,6 +62,7 @@ public class RubikCube {
 	}
 
 	// A very sophisticated method to execute a simple task
+	// *** Need better comment ***
 	public static String[] permute(String s1, String s2, String s3, String s4,
 			int loc1, int loc2, int loc3, int loc4) {
 		String[] res = new String[4];
@@ -92,7 +97,7 @@ public class RubikCube {
 		return res;
 	}
 
-	// Rotate up
+	// Rotate up clockwise
 	public void rotateUpClockwise() {
 		up = rotateClockwise(up);
 
@@ -104,6 +109,7 @@ public class RubikCube {
 		back = temp + back.substring(3);
 	}
 
+	// Rotate up anti-clockwise
 	public void rotateUpAntiClockwise() {
 		up = rotateAntiClockwise(up);
 
@@ -255,13 +261,7 @@ public class RubikCube {
 		// Test case for rotateUpClockwise
 		String initial = "uuuuuuuuulllllllllfffffffffrrrrrrrrrdddddddddbbbbbbbbb";
 		RubikCube cube = new RubikCube(initial);
-		cube.rotateBackAntiClockwise();
-		//		cube.rotateUpAntiClockwise();
-		//		cube.rotateDownAntiClockwise();
-		//		cube.rotateUpAntiClockwise();
-		//		cube.rotateUpAntiClockwise();
-		//		cube.rotateUpAntiClockwise();
-		//		cube.rotateUpAntiClockwise();
+		cube.rotateDownClockwise();
 		cube.print();
 	}
 }
