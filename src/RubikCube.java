@@ -28,7 +28,7 @@ public class RubikCube {
 	public String getState() {
 		return up + left + front + right + down + back;
 	}
-	
+
 	// Helper method: Rotate clockwise
 	public static String rotateClockwise(String state) {
 		StringBuilder res = new StringBuilder("");
@@ -253,6 +253,40 @@ public class RubikCube {
 		System.out.println("    " + down.substring(3, 6));
 		System.out.println("    " + down.substring(6, 9));
 		System.out.println();
+	}
+
+	// Helper method: get the color at a specific position
+	public String getColor(String face, int pos) {
+		String temp = getState();
+		if (face.equals("front")) {
+			temp = temp.substring(18,27);
+		}
+		else if (face.equals("back")) {
+			temp = temp.substring(45,54);
+		}
+		else if (face.equals("up")) {
+			temp = temp.substring(0,9);
+		}
+		else if (face.equals("down")) {
+			temp = temp.substring(36,45);
+		}
+		else if (face.equals("left")) {
+			temp = temp.substring(9,18);
+		}
+		else if (face.equals("right")) {
+			temp = temp.substring(27,36);
+		}
+		else {
+			System.out.println("Invalid command!");
+		}
+		
+		if (1 <= pos && pos <=9) {
+			return temp.charAt(pos-1) + "";
+		}
+		else {
+			System.out.println("Invalid position!");
+			return null;
+		}
 	}
 
 	// Main method to run driver tests
