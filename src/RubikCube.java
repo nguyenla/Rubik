@@ -289,6 +289,33 @@ public class RubikCube {
 		}
 	}
 
+	// This method rotates the whole cube to the right
+	public void rotateCubeRight() {
+		String temp = front;
+		front = left;
+		left = back;
+		back = right;
+		right = temp;
+		up = rotateAntiClockwise(up);
+		down = rotateClockwise(down);
+	}
+	
+	// This method rotates the whole cube to the left
+	public void rotateCubeLeft() {
+		String temp = front;
+		front = right;
+		right = back;
+		back = left;
+		left = temp;
+		up = rotateClockwise(up);
+		down = rotateAntiClockwise(down);
+	}
+	
+	// Check of a specific square matches the color of the face it is on
+	public boolean check_square(String face, int pos) {
+		return getColor(face, pos).equals(getColor(face, 5));
+	}
+	
 	// Main method to run driver tests
 	public static void main(String[] args) {
 		String initial = "uuuuuuuuulllllllllfffffffffrrrrrrrrrdddddddddbbbbbbbbb";
