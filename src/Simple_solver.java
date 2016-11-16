@@ -1,23 +1,69 @@
+import java.util.ArrayList;
+
 // This class implements a common method to solve the Rubik cube.
 // This method includes 7 simple algorithms.
 
 public class Simple_solver {
 	private RubikCube cube;
+	private ArrayList<String> steps;
 	
 	public Simple_solver(String initialState) {
 		cube = new RubikCube(initialState);
+		steps = new ArrayList<String>();
 	}
 	
-	public void bottom_layer_edge() {
-		while (!(cube.check_square("front", 8) && cube.check_square("back", 8) 
-				&& cube.check_square("left", 8) && cube.check_square("right", 8))) {
-			
-			// Set up the desired orientation
-			while (!(cube.getColor("front", 5).equals(cube.getColor("right", 8)) 
-					&& cube.getColor("right", 5).equals(cube.getColor("front", 8)))) {
-				cube.rotateCubeRight();
+	public void bottom_cross_helper() {
+		cube.rotateRightAntiClockwise();
+		cube.rotateBackAntiClockwise();
+		cube.rotateDownAntiClockwise();
+		cube.rotateBackClockwise();
+		cube.rotateDownClockwise();
+		cube.rotateRightClockwise();
+	}
+	
+	// Create a cross of the same color in the bottom face of the cube
+	public void bottom_cross() {
+		// make sure there is one square with the right color
+		if (!cube.check_square("down", 2) && !cube.check_square("down", 4) 
+			&& !cube.check_square("down", 6) && !cube.check_square("down", 8)) {
+			bottom_cross_helper();
+		}
+		
+		while (!cube.check_square("down", 2)) {
+			cube.rotateCubeLeft();
+		}
+		
+		// make sure there are at least 2 squares with the right color
+		if (!cube.check_square("down", 4)  && !cube.check_square("down", 6) && !cube.check_square("down", 8)) {
+			bottom_cross_helper();
+		}
+		
+		// make sure that the vertical strip is of the same color
+		if (!cube.check_square("down", 8)) {
+			if (cube.check_square("down", 4)) {
+				bottom_cross_helper();
 			}
-			
+			else if (cube.check_square("down", 6)) {
+				cube.rotateCubeLeft();
+				bottom_cross_helper();
+			}
+		}
+		
+		// Create the cross if it is not formed yet
+		if (cube.check_square("down", 8) && !cube.check_square("down", 4)) {
+			bottom_cross_helper();
+		}
+	}
+	
+	// This method makes sure that the center square of the bottom layer of each face has the correct color
+	public void bottom_layer_edge() {
+		while (!cube.check_square("front", 8)) {
+			cube.rotateDownClockwise();
+		}
+		cube.rotateCubeLeft();
+		
+		// while not all the bottom middle squares are correct
+		while (!cube.check_square("front", 8)) {
 			// Apply moves
 			cube.rotateRightAntiClockwise();
 			cube.rotateDownClockwise();
@@ -28,6 +74,8 @@ public class Simple_solver {
 			cube.rotateDownClockwise();
 			cube.rotateRightClockwise();
 			cube.rotateDownClockwise();
+			
+			cube.rotateCubeLeft();
 		}
 	}
 	
@@ -127,6 +175,14 @@ public class Simple_solver {
 		}
 	}
 	
+	// Solve method
+	public void solve() {
+		bottom_layer_edge();
+		bottom_layer_corner_location();
+		bottom_layer();
+		printState();
+	}
+	
 	// Print the current state of the rubik cube
 	public void printState() {
 		cube.print();
@@ -135,11 +191,12 @@ public class Simple_solver {
 	public static void main(String[] args) {
 //		Simple_solver solver = new Simple_solver("uuuuuuuuulllllllllfffffffffrrrrrrrrrdddddddddbbbbbbbbb");
 //		String state = "bbbbbbbbboooooogwgwwwwwwrowrrrrrrrroygggggyggyyyyyywyo";
-		String state = "bbbbbbbbboooooowoywwwwwwgwyrrrrrrororgggggrggyyyyyywyg";
+//		String state = "bbbbbbbbboooooowoywwwwwwgwyrrrrrrororgggggrggyyyyyywyg";
+		String state = "bbbbbbbbboooooogggwwwwwwrggrrrrrrogryowrgwyywyyyyyyggo";
 		Simple_solver solver2 = new Simple_solver(state);
 		solver2.printState();
-		solver2.bottom_layer_corner_location();
-		solver2.bottom_layer();
+		solver2.bottom_cross();
 		solver2.printState();
+		solver2.solve();
 	}
 }
