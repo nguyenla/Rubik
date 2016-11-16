@@ -140,13 +140,26 @@ public class RubikCube {
 		back = back.substring(0, 6) + temp;
 	}
 
-	// Rotate left
+	// Rotate left clockwise
+	// U (147) -> F (147) -> D (147) -> B (963) -> U (147)
 	public void rotateLeftClockwise() {
-
+		left = rotateClockwise(left);
+		String[] temp = permute(up, front, down, back, 147, 147, 147, 963);
+		up = temp[0];
+		front = temp[1];
+		down = temp[2];
+		back = temp[3];
 	}
 
+	// Rotate left anti-clockwise
+	// U (147) -> B (963) -> D (147) -> F (147) -> U (147)
 	public void rotateLeftAntiClockwise() {
-
+		left = rotateAntiClockwise(left);
+		String[] temp = permute(up, back, down, front, 147, 963, 147, 147);
+		up = temp[0];
+		back = temp[1];
+		down = temp[2];
+		front = temp[3];
 	}
 
 	// Rotate right clockwise
@@ -193,13 +206,19 @@ public class RubikCube {
 		up = temp[3];
 	}
 
-	// Rotate back
+	// Rotate back clockwise
 	public void rotateBackClockwise() {
-
+		back = rotateClockwise(back);
+		String[] temp = permute(up, left, down, right, 321, 147, 789, 963);
+		up = temp[0];
+		left = temp[1];
+		down = temp[2];
+		right = temp[3];
 	}
 
+	// Rotate back anti-clockwise
 	public void rotateBackAntiClockwise() {
-
+		back = rotateAntiClockwise(back);
 	}
 
 	// Helper method: Print the rubik cube
@@ -231,7 +250,7 @@ public class RubikCube {
 		// Test case for rotateUpClockwise
 		String initial = "uuuuuuuuulllllllllfffffffffrrrrrrrrrdddddddddbbbbbbbbb";
 		RubikCube cube = new RubikCube(initial);
-		cube.rotateRightAntiClockwise();
+		cube.rotateBackClockwise();
 		//		cube.rotateUpAntiClockwise();
 		//		cube.rotateDownAntiClockwise();
 		//		cube.rotateUpAntiClockwise();
