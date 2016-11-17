@@ -39,18 +39,15 @@ public class Simple_solver {
 	}
 	
 	public void helper_second_layer() {
-		System.out.println("Stuck in helper");
 		String bottom = cube.getColor("down", 5);
 		while (!( (cube.getColor("front", 8).equals(bottom) || cube.getColor("down", 2).equals(bottom)) &&
 				(cube.getColor("left", 8).equals(bottom) || cube.getColor("down", 4).equals(bottom)) && 
 				(cube.getColor("right", 8).equals(bottom) || cube.getColor("down", 6).equals(bottom)) && 
 				(cube.getColor("back", 8).equals(bottom) || cube.getColor("down", 8).equals(bottom)))) {
 			while (cube.getColor("front", 8).equals(bottom) || cube.getColor("down", 2).equals(bottom)) {
-				System.out.println("Stuck in helper 2");
 				cube.rotateCubeLeft();
 			}
 			while (!cube.check_square("front", 8)) {
-				System.out.println("Stuck in helper 3");
 				cube.rotateCubeLeft();
 				cube.rotateDownClockwise();
 			}
@@ -64,18 +61,15 @@ public class Simple_solver {
 	}
 	// This method put all the squares on the second layer in the correct position
 	public void second_layer() {
-//		String bottom = cube.getColor("down", 5);
 		helper_second_layer();
 		while (!(cube.check_square("front", 4) && cube.check_square("front", 6) &&
 				cube.check_square("left", 4) && cube.check_square("left", 6) &&
 				cube.check_square("right", 4) && cube.check_square("right", 6) &&
 				cube.check_square("back", 4) && cube.check_square("back", 6))) {
-			System.out.println("Stuck in second layer");
 			while (cube.check_square("front", 6) && cube.check_square("right", 4)) {
 				cube.rotateCubeLeft();	
 			}
 			if (!(cube.check_square("front", 6) && cube.check_square("right", 4))) {
-				printState();
 				swap_second_layer("right");
 				helper_second_layer();
 			}
@@ -101,7 +95,6 @@ public class Simple_solver {
 			&& !cube.check_square("down", 6) && !cube.check_square("down", 8)) {
 			bottom_cross_helper();
 		}
-		
 		while (!cube.check_square("down", 2)) {
 			cube.rotateCubeLeft();
 		}
@@ -128,6 +121,19 @@ public class Simple_solver {
 		}
 	}
 	
+	// This method swaps the bottom middle squares of two adjacent faces
+	public void helper_bottom_layer_edge() {
+		cube.rotateRightAntiClockwise();
+		cube.rotateDownClockwise();
+		cube.rotateDownClockwise();
+		cube.rotateRightClockwise();
+		cube.rotateDownClockwise();
+		cube.rotateRightAntiClockwise();
+		cube.rotateDownClockwise();
+		cube.rotateRightClockwise();
+		cube.rotateDownClockwise();
+	}
+	
 	// This method makes sure that the center square of the bottom layer of each face has the correct color
 	public void bottom_layer_edge() {
 		while (!cube.check_square("front", 8)) {
@@ -135,20 +141,32 @@ public class Simple_solver {
 		}
 		cube.rotateCubeLeft();
 		
-		// while not all the bottom middle squares are correct
-		while (!cube.check_square("front", 8)) {
-			// Apply moves
-			cube.rotateRightAntiClockwise();
-			cube.rotateDownClockwise();
-			cube.rotateDownClockwise();
-			cube.rotateRightClockwise();
-			cube.rotateDownClockwise();
-			cube.rotateRightAntiClockwise();
-			cube.rotateDownClockwise();
-			cube.rotateRightClockwise();
-			cube.rotateDownClockwise();
-			
+		// if 2 faces are done
+		if (cube.check_square("front", 8)) {
 			cube.rotateCubeLeft();
+			if (!cube.check_square("front", 8)) {
+				helper_bottom_layer_edge();
+			}
+		}
+		// if we only need to do one more swap
+		else if (cube.getColor("front", 8).equals(cube.getColor("right", 5)) &&
+				cube.getColor("right", 8).equals(cube.getColor("front", 5))) {
+			helper_bottom_layer_edge();
+		}
+		// if the front face is not done, but the right face is done
+		else if (cube.check_square("right", 8)) {
+			cube.rotateDownAntiClockwise();
+			helper_bottom_layer_edge();
+			cube.rotateCubeLeft();
+			cube.rotateCubeLeft();
+			helper_bottom_layer_edge();
+		} 
+		// else we need 2 swaps
+		else {
+			cube.rotateCubeLeft();
+			helper_bottom_layer_edge();
+			cube.rotateCubeRight();
+			helper_bottom_layer_edge();
 		}
 	}
 	
@@ -174,6 +192,19 @@ public class Simple_solver {
 				(c3.equals(s1) || c3.equals(s2) || c3.equals(s3));	
 	}
 	
+	public void helper_bottom_layer_corner_location() {
+		cube.rotateRightAntiClockwise();
+		cube.rotateDownAntiClockwise();
+		cube.rotateRightClockwise();
+		cube.rotateDownClockwise();
+		cube.rotateLeftClockwise();
+		cube.rotateDownAntiClockwise();
+		cube.rotateRightAntiClockwise();
+		cube.rotateDownClockwise();
+		cube.rotateLeftAntiClockwise();
+		cube.rotateRightClockwise();
+	}
+	
 	public void bottom_layer_corner_location() {
 		// Set up the desired orientation
 		for (int i = 0; i < 4; i++) {
@@ -186,16 +217,7 @@ public class Simple_solver {
 		}
 		
 		if (!check_bottom_corner(2)) {
-			cube.rotateRightAntiClockwise();
-			cube.rotateDownAntiClockwise();
-			cube.rotateRightClockwise();
-			cube.rotateDownClockwise();
-			cube.rotateLeftClockwise();
-			cube.rotateDownAntiClockwise();
-			cube.rotateRightAntiClockwise();
-			cube.rotateDownClockwise();
-			cube.rotateLeftAntiClockwise();
-			cube.rotateRightClockwise();
+			helper_bottom_layer_corner_location();
 			while (!check_bottom_corner(2)) {
 				cube.rotateCubeRight();
 			}
@@ -224,7 +246,6 @@ public class Simple_solver {
 			while (cube.check_square("front", 9)) {
 				cube.rotateCubeLeft();
 			}
-			System.out.println("Before move:");
 			printState();
 			while (!cube.check_square("front", 9)) {
 				cube.rotateRightAntiClockwise();
@@ -272,7 +293,6 @@ public class Simple_solver {
 		solver2.printState();
 		solver2.second_layer();
 		solver2.printState();
-		System.out.println("done");
 		solver2.solve();
 	}
 }
