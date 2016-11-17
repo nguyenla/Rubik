@@ -7,11 +7,84 @@ public class Simple_solver {
 	private RubikCube cube;
 	private ArrayList<String> steps;
 	
+	// Constructor
 	public Simple_solver(String initialState) {
 		cube = new RubikCube(initialState);
 		steps = new ArrayList<String>();
 	}
 	
+	// This method switch the position of the bottom center square and the right center square
+	// on the front face
+	public void swap_second_layer(String direction) {
+		if (direction.equals("right")) {
+			cube.rotateDownAntiClockwise();
+			cube.rotateRightAntiClockwise();
+			cube.rotateDownClockwise();
+			cube.rotateRightClockwise();
+			cube.rotateDownClockwise();
+			cube.rotateFrontClockwise();
+			cube.rotateDownAntiClockwise();
+			cube.rotateFrontAntiClockwise();
+		}
+		else if (direction.equals("left")) {
+			cube.rotateDownClockwise();
+			cube.rotateLeftClockwise();
+			cube.rotateDownAntiClockwise();
+			cube.rotateLeftAntiClockwise();
+			cube.rotateDownAntiClockwise();
+			cube.rotateFrontAntiClockwise();
+			cube.rotateDownClockwise();
+			cube.rotateFrontClockwise();
+		}
+	}
+	
+	public void helper_second_layer() {
+		System.out.println("Stuck in helper");
+		String bottom = cube.getColor("down", 5);
+		while (!( (cube.getColor("front", 8).equals(bottom) || cube.getColor("down", 2).equals(bottom)) &&
+				(cube.getColor("left", 8).equals(bottom) || cube.getColor("down", 4).equals(bottom)) && 
+				(cube.getColor("right", 8).equals(bottom) || cube.getColor("down", 6).equals(bottom)) && 
+				(cube.getColor("back", 8).equals(bottom) || cube.getColor("down", 8).equals(bottom)))) {
+			while (cube.getColor("front", 8).equals(bottom) || cube.getColor("down", 2).equals(bottom)) {
+				System.out.println("Stuck in helper 2");
+				cube.rotateCubeLeft();
+			}
+			while (!cube.check_square("front", 8)) {
+				System.out.println("Stuck in helper 3");
+				cube.rotateCubeLeft();
+				cube.rotateDownClockwise();
+			}
+			if (cube.getColor("down", 2).equals(cube.getColor("right", 5))) {
+				swap_second_layer("right");
+			}
+			else if (cube.getColor("down", 2).equals(cube.getColor("left", 5))) {
+				swap_second_layer("left");
+			}
+		}
+	}
+	// This method put all the squares on the second layer in the correct position
+	public void second_layer() {
+//		String bottom = cube.getColor("down", 5);
+		helper_second_layer();
+		while (!(cube.check_square("front", 4) && cube.check_square("front", 6) &&
+				cube.check_square("left", 4) && cube.check_square("left", 6) &&
+				cube.check_square("right", 4) && cube.check_square("right", 6) &&
+				cube.check_square("back", 4) && cube.check_square("back", 6))) {
+			System.out.println("Stuck in second layer");
+			while (cube.check_square("front", 6) && cube.check_square("right", 4)) {
+				cube.rotateCubeLeft();	
+			}
+			if (!(cube.check_square("front", 6) && cube.check_square("right", 4))) {
+				printState();
+				swap_second_layer("right");
+				helper_second_layer();
+			}
+		}
+		
+	}
+	
+	// This method includes a series of moves that might be executed multiple times
+	// to get the cross in the bottom
 	public void bottom_cross_helper() {
 		cube.rotateRightAntiClockwise();
 		cube.rotateBackAntiClockwise();
@@ -177,6 +250,7 @@ public class Simple_solver {
 	
 	// Solve method
 	public void solve() {
+		bottom_cross();
 		bottom_layer_edge();
 		bottom_layer_corner_location();
 		bottom_layer();
@@ -192,11 +266,13 @@ public class Simple_solver {
 //		Simple_solver solver = new Simple_solver("uuuuuuuuulllllllllfffffffffrrrrrrrrrdddddddddbbbbbbbbb");
 //		String state = "bbbbbbbbboooooogwgwwwwwwrowrrrrrrrroygggggyggyyyyyywyo";
 //		String state = "bbbbbbbbboooooowoywwwwwwgwyrrrrrrororgggggrggyyyyyywyg";
-		String state = "bbbbbbbbboooooogggwwwwwwrggrrrrrrogryowrgwyywyyyyyyggo";
+//		String state = "bbbbbbbbboooooogggwwwwwwrggrrrrrrogryowrgwyywyyyyyyggo";
+		String state = "bbbbbbbbbooogoogrgwwwwwryygrrrwrgooyoowyggwgryyywyrgyr";
 		Simple_solver solver2 = new Simple_solver(state);
 		solver2.printState();
-		solver2.bottom_cross();
+		solver2.second_layer();
 		solver2.printState();
+		System.out.println("done");
 		solver2.solve();
 	}
 }
