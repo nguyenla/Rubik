@@ -55,7 +55,7 @@ public class Simple_solver {
 		cube.rotateDownAntiClockwise();
 		cube.rotateLeftAntiClockwise();
 	}
-	
+
 	// Helper method: Bring left square down to bottom layer
 	public void bring_left_down() {
 		cube.rotateLeftClockwise();
@@ -149,7 +149,6 @@ public class Simple_solver {
 				helper_second_layer();
 			}
 		}
-
 	}
 
 	// This method includes a series of moves that might be executed multiple times
@@ -216,31 +215,41 @@ public class Simple_solver {
 		}
 		cube.rotateCubeLeft();
 
-		// if 2 faces are done
+		// if front and left are done
 		if (cube.check_square("front", 8)) {
 			cube.rotateCubeLeft();
 			if (!cube.check_square("front", 8)) {
 				helper_bottom_layer_edge();
 			}
 		}
-		// if we only need to do one more swap
+		
+		// if back and left are done, we only need to do one more swap
 		else if (cube.getColor("front", 8).equals(cube.getColor("right", 5)) &&
 				cube.getColor("right", 8).equals(cube.getColor("front", 5))) {
 			helper_bottom_layer_edge();
 		}
+		
 		// if the front face is not done, but the right face is done
-		else if (cube.check_square("right", 8)) {
+		else if (cube.check_square("right", 8) && !cube.check_square("front", 8)) {
 			cube.rotateDownAntiClockwise();
 			helper_bottom_layer_edge();
 			cube.rotateCubeLeft();
 			cube.rotateCubeLeft();
 			helper_bottom_layer_edge();
 		} 
-		// else we need 2 swaps
-		else {
-			cube.rotateCubeLeft();
+		
+		// if only the right face is done
+		else if (cube.check_square("right", 8) && !cube.check_square("front", 8) && !cube.check_square("back", 8)) {
+			cube.rotateDownAntiClockwise();
 			helper_bottom_layer_edge();
 			cube.rotateCubeRight();
+			cube.rotateCubeRight();
+			helper_bottom_layer_edge();
+		}
+		// if all the remaining faces are not done
+		else {
+			helper_bottom_layer_edge();
+			cube.rotateCubeLeft();
 			helper_bottom_layer_edge();
 		}
 	}
@@ -295,14 +304,13 @@ public class Simple_solver {
 			helper_bottom_layer_corner_location();
 			while (!check_bottom_corner(2)) {
 				cube.rotateCubeRight();
-				System.out.println("Stuck");
 			}
 		}
 
 		// Apply steps until the bottom corners are in the correct locations
 		while (!check_bottom_corner(1) || !check_bottom_corner(3) || !check_bottom_corner(4)) {
-			System.out.println("Stuck");
-			printState();
+			//			System.out.println("Stuck");
+			//			printState();
 			helper_bottom_layer_corner_location();
 		}
 	}
@@ -315,7 +323,7 @@ public class Simple_solver {
 			while (cube.check_square("front", 9)) {
 				cube.rotateCubeLeft();
 			}
-			printState();
+			//			printState();
 			while (!cube.check_square("front", 9)) {
 				cube.rotateRightAntiClockwise();
 				cube.rotateDownAntiClockwise();
@@ -343,21 +351,21 @@ public class Simple_solver {
 		second_layer();
 		System.out.println("After second layer:");
 		printState();
-		
+
 		bottom_cross();
 		System.out.println("After bottom cross:");
 		printState();
-		
+
 		bottom_layer_edge();
 		System.out.println("After bottom center square:");
 		printState();
-		
+
 		bottom_layer_corner_location();
-		System.out.println("After bottom corner location:");
+		System.out.println("After bottom_layer_corner_location(), the locations of the corners should be correct.");
 		printState();
-		
+
 		bottom_layer();
-		System.out.println("Final state:");
+		System.out.println("After bottom_layer(), the cube should be solved.");
 		printState();
 	}
 
@@ -368,15 +376,11 @@ public class Simple_solver {
 
 	public static void main(String[] args) {
 		//		Simple_solver solver = new Simple_solver("uuuuuuuuulllllllllfffffffffrrrrrrrrrdddddddddbbbbbbbbb");
-		//		String state = "bbbbbbbbboooooogwgwwwwwwrowrrrrrrrroygggggyggyyyyyywyo";
-		//		String state = "bbbbbbbbboooooowoywwwwwwgwyrrrrrrororgggggrggyyyyyywyg";
-		//		String state = "bbbbbbbbboooooogggwwwwwwrggrrrrrrogryowrgwyywyyyyyyggo";
-//		String state = "bbbbbbbbbooogoogrgwwwwwryygrrrwrgooyoowyggwgryyywyrgyr";
-		String state = "gbwbbbbbgoowyorwgyrwoywrgwbyrgwryooyrgyrgwoobrywoygrgb";
+		String state = "bbbbbbbbb,rrrrrrrwg,gggggwwow,oooyooggo,rgoowwwrw,yyyyyyywy";
+		System.out.println("Initial state:");
 		Simple_solver solver2 = new Simple_solver(state);
 		solver2.printState();
-		solver2.bring_all_top_squares_up();
-		solver2.printState();
+		//		solver2.bring_all_top_squares_up();
 		solver2.solve();
 	}
 }

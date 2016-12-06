@@ -11,13 +11,20 @@ public class RubikCube {
 
 	// Constructor to initialize the orientation of a rubik cube to an arbitrary state
 	public RubikCube(String initial) {
-		if (initial.length() == 54) {
-			up = initial.substring(0, 9);
-			left = initial.substring(9, 18);
-			front = initial.substring(18, 27);
-			right = initial.substring(27, 36);
-			down = initial.substring(36, 45);
-			back = initial.substring(45, 54);
+		String[] states = initial.split(",");
+		if (initial.length() == 59) {
+			up = states[0];
+			left = states[1];
+			front = states[2];
+			right = states[3];
+			down = states[4];
+			back = states[5];
+//			up = initial.substring(0, 9);
+//			left = initial.substring(9, 18);
+//			front = initial.substring(18, 27);
+//			right = initial.substring(27, 36);
+//			down = initial.substring(36, 45);
+//			back = initial.substring(45, 54);
 		}
 		else {
 			System.out.println("Invalid orientation");
