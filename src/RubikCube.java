@@ -19,12 +19,6 @@ public class RubikCube {
 			right = states[3];
 			down = states[4];
 			back = states[5];
-//			up = initial.substring(0, 9);
-//			left = initial.substring(9, 18);
-//			front = initial.substring(18, 27);
-//			right = initial.substring(27, 36);
-//			down = initial.substring(36, 45);
-//			back = initial.substring(45, 54);
 		}
 		else {
 			System.out.println("Invalid orientation");

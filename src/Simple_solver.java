@@ -13,17 +13,64 @@ public class Simple_solver {
 		steps = new ArrayList<String>();
 	}
 
+	// Helper method
+	// This method counts the number of middle edge squares on the top face with the correct color
+	public int helper_num_correct_center_top() {
+		int numCorrect = 0;
+		if (cube.check_square("up", 2)) {
+			numCorrect++;
+		}
+		if (cube.check_square("up", 4)) {
+			numCorrect++;
+		}
+		if (cube.check_square("up", 6)) {
+			numCorrect++;
+		}
+		if (cube.check_square("up", 8)) {
+			numCorrect++;
+		}
+		return numCorrect;
+	}
+	
+	// Helper method
+	// This method counts the number of corners on the top face with the correct color
+	public int helper_num_correct_corners_top() {
+		int numCorrect = 0;
+		if (cube.check_square("up", 1)) {
+			numCorrect++;
+		}
+		if (cube.check_square("up", 3)) {
+			numCorrect++;
+		}
+		if (cube.check_square("up", 7)) {
+			numCorrect++;
+		}
+		if (cube.check_square("up", 9)) {
+			numCorrect++;
+		}
+		return numCorrect;
+	}
+
 	// Accessor method for the cube field
 	public RubikCube getCube() {
 		return cube;
 	}
-	
+
+	public void first_layer_center() {
+		// if a center edge square is on the bottom
+		
+		// if a center edge square is on one of (back, front, left, right)
+		
+		// swapping if necessary
+	}
+
+
 	// This method arranges the corner square of the first layer
 	// After executing this method, all the corner square on the top face should be correct
 	public void first_layer_corner() {
 		int numCorrect = helper_num_correct_corners_top(); // number of correct corners on the top face
 		String top = cube.getColor("up", 5);
-		
+
 		while (numCorrect < 4) {
 			// if the bottom face contains a square with the color of the top face
 			while (cube.getFace("down").contains(top)) {
@@ -70,10 +117,12 @@ public class Simple_solver {
 				numCorrect = helper_num_correct_corners_top();
 			}
 		}
+		
+		// TODO: implement swapping if necessary
 	}
 
 	// Helper method
-	// NEED COMMENT HERE
+	// TODO: COMMENT HERE
 	public void helper_first_layer_corner(String pos) {
 		if (pos.equals("left")) {
 			while (!cube.check_square("left", 9)) {
@@ -92,25 +141,6 @@ public class Simple_solver {
 		else {
 			System.out.println("Error: Wrong argument used for function helper_first_layer_corner.");
 		}
-	}
-	
-	// Helper method
-	// This method counts the number of corners on the top face with the correct color
-	public int helper_num_correct_corners_top() {
-		int numCorrect = 0;
-		if (cube.check_square("up", 1)) {
-			numCorrect++;
-		}
-		if (cube.check_square("up", 3)) {
-			numCorrect++;
-		}
-		if (cube.check_square("up", 7)) {
-			numCorrect++;
-		}
-		if (cube.check_square("up", 9)) {
-			numCorrect++;
-		}
-		return numCorrect;
 	}
 
 	// Helper method: This method brings all the top squares from the bottom layer to their correct places
@@ -443,6 +473,10 @@ public class Simple_solver {
 
 	// Solve method
 	public void solve() {
+		first_layer_corner();
+		System.out.println("After completing all first layer corners:");
+		printState();
+		
 		second_layer();
 		System.out.println("After second layer:");
 		printState();
@@ -470,14 +504,12 @@ public class Simple_solver {
 	}
 
 	public static void main(String[] args) {
-		//		Simple_solver solver = new Simple_solver("uuuuuuuuulllllllllfffffffffrrrrrrrrrdddddddddbbbbbbbbb");
+		// Simple_solver solver = new Simple_solver("uuuuuuuuulllllllllfffffffffrrrrrrrrrdddddddddbbbbbbbbb");
 		String state = "obrbbbybg,gybgyygry,orrorywgr,wgyrggywg,owbwwoowb,woboorryw";
 		Simple_solver solver2 = new Simple_solver(state);
 		System.out.println("Initial state:");
 		solver2.printState();
 		solver2.first_layer_corner();
 		solver2.printState();
-		//		solver2.bring_all_top_squares_up();
-		//solver2.solve();
 	}
 }
