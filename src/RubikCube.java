@@ -8,11 +8,13 @@ public class RubikCube {
 	private String right;
 	private String front;
 	private String back;
+	private int move;
 
 	// Constructor to initialize the orientation of a rubik cube to an arbitrary state
 	public RubikCube(String initial) {
-		String[] states = initial.split(",");
+		move = 0;
 		if (initial.length() == 59) {
+			String[] states = initial.split(",");
 			up = states[0];
 			left = states[1];
 			front = states[2];
@@ -28,6 +30,16 @@ public class RubikCube {
 	// return a string that contains the current state of the Rubik cube
 	public String getState() {
 		return up + left + front + right + down + back;
+	}
+	
+	// return the number of moves made on the cube since resetting
+	public int getMove() {
+		return move;
+	}
+	
+	// reset the number of moves to 0
+	public void resetMove() {
+		move = 0;
 	}
 	
 	// return the corresponding face
@@ -132,6 +144,7 @@ public class RubikCube {
 		front = right.substring(0, 3) + front.substring(3);
 		right = back.substring(0, 3) + right.substring(3);
 		back = temp + back.substring(3);
+		move++;
 	}
 
 	// Rotate up anti-clockwise
@@ -144,6 +157,7 @@ public class RubikCube {
 		back = right.substring(0, 3) + back.substring(3);
 		right = front.substring(0, 3) + right.substring(3);
 		front = temp + front.substring(3);
+		move++;
 	}
 
 	// Rotate down
@@ -157,6 +171,7 @@ public class RubikCube {
 		back = back.substring(0, 6) + right.substring(6);
 		right = right.substring(0, 6) + front.substring(6);
 		front = front.substring(0, 6) + temp;
+		move++;
 	}
 
 	public void rotateDownAntiClockwise() {
@@ -169,6 +184,7 @@ public class RubikCube {
 		front = front.substring(0, 6) + right.substring(6);
 		right = right.substring(0, 6) + back.substring(6);
 		back = back.substring(0, 6) + temp;
+		move++;
 	}
 
 	// Rotate left clockwise
@@ -180,6 +196,7 @@ public class RubikCube {
 		front = temp[1];
 		down = temp[2];
 		back = temp[3];
+		move++;
 	}
 
 	// Rotate left anti-clockwise
@@ -191,6 +208,7 @@ public class RubikCube {
 		back = temp[1];
 		down = temp[2];
 		front = temp[3];
+		move++;
 	}
 
 	// Rotate right clockwise
@@ -202,6 +220,7 @@ public class RubikCube {
 		back = temp[1];
 		down = temp[2];
 		front = temp[3];
+		move++;
 	}
 
 	// Rotate right anti-clockwise
@@ -213,6 +232,7 @@ public class RubikCube {
 		front = temp[1];
 		down = temp[2];
 		back = temp[3];
+		move++;
 	}
 
 	// Rotate front clockwise
@@ -224,6 +244,7 @@ public class RubikCube {
 		up = temp[1];
 		right = temp[2];
 		down = temp[3];
+		move++;
 	}
 
 	// Rotate front anti-clockwise
@@ -235,6 +256,7 @@ public class RubikCube {
 		down = temp[1];
 		right = temp[2];
 		up = temp[3];
+		move++;
 	}
 
 	// Rotate back clockwise
@@ -246,6 +268,7 @@ public class RubikCube {
 		left = temp[1];
 		down = temp[2];
 		right = temp[3];
+		move++;
 	}
 
 	// Rotate back anti-clockwise
@@ -257,6 +280,7 @@ public class RubikCube {
 		right = temp[1];
 		down = temp[2];
 		left = temp[3];
+		move++;
 	}
 
 	// Helper method: Print the rubik cube

@@ -17,16 +17,16 @@ public class Simple_solver {
 	// This method counts the number of middle edge squares on the top face with the correct color
 	public int helper_num_correct_center_top() {
 		int numCorrect = 0;
-		if (cube.check_square("up", 2)) {
+		if (cube.check_square("up", 2) && cube.check_square("back", 2)) {
 			numCorrect++;
 		}
-		if (cube.check_square("up", 4)) {
+		if (cube.check_square("up", 4) && cube.check_square("left", 2)) {
 			numCorrect++;
 		}
-		if (cube.check_square("up", 6)) {
+		if (cube.check_square("up", 6) && cube.check_square("right", 2)) {
 			numCorrect++;
 		}
-		if (cube.check_square("up", 8)) {
+		if (cube.check_square("up", 8) && cube.check_square("front", 2)) {
 			numCorrect++;
 		}
 		return numCorrect;
@@ -57,14 +57,97 @@ public class Simple_solver {
 	}
 
 	public void first_layer_center() {
-		// if a center edge square is on the bottom
+		String top = cube.getColor("up", 5);
+		int numCorrect = helper_num_correct_center_top();
 		
-		// if a center edge square is on one of (back, front, left, right)
+		// if there is a middle square with the correct color at the top, but at the wrong location
+		if (numCorrect > 0) {
+			int i = 0;
+			while (i < 4) {
+				if (cube.check_square("up", 8) && !cube.check_square("front", 2)) {
+					i = 0;
+					cube.rotateFrontClockwise();
+					cube.rotateFrontClockwise();
+					while (!cube.check_square("front", 8)) {
+						cube.rotateCubeLeft();
+						cube.rotateDownClockwise();
+					}
+					cube.rotateFrontClockwise();
+					cube.rotateFrontClockwise();
+				}
+				else {
+					cube.rotateCubeLeft();
+					i++;
+				}
+			}
+		}
+		numCorrect = helper_num_correct_center_top();
 		
-		// swapping if necessary
+		while (numCorrect < 4) {
+			// if a middle edge square is on the bottom
+			while (cube.getFace("down").contains(top)) {
+				while (!cube.getColor("down", 2).equals(top)) {
+					cube.rotateCubeLeft();;
+				}
+				while (!cube.check_square("front", 8)) {
+					cube.rotateCubeLeft();
+					cube.rotateDownClockwise();
+				}
+				cube.rotateFrontClockwise();
+				cube.rotateFrontClockwise();
+				numCorrect = helper_num_correct_center_top();
+			}
+			
+			// if a middle edge square is on one of (back, front, left, right)
+			int i = 0;
+			while (i < 4) {
+				if (cube.getColor("front", 2).equals(top)) {
+					i = 0;
+					cube.rotateFrontAntiClockwise();
+					cube.rotateLeftClockwise();
+					cube.rotateCubeRight();
+					helper_bring_middle_up();
+				}
+				else if (cube.getColor("front", 4).equals(top)) {
+					i = 0;
+					cube.rotateLeftClockwise();
+					cube.rotateCubeRight();
+					helper_bring_middle_up();
+				}
+				else if (cube.getColor("front", 6).equals(top)) {
+					i = 0;
+					cube.rotateRightAntiClockwise();
+					cube.rotateCubeLeft();
+					helper_bring_middle_up();
+				}
+				else if (cube.getColor("front", 8).equals(top)) {
+					i = 0;
+					cube.rotateFrontAntiClockwise();
+					cube.rotateRightAntiClockwise();
+					cube.rotateCubeLeft();
+					helper_bring_middle_up();
+				}
+				else {
+					cube.rotateCubeLeft();
+					i++;
+				}
+			}
+			numCorrect = helper_num_correct_center_top();
+		}
 	}
 
 
+	// Helper method
+	// Different from bring_left_up() and bring_right_up()
+	public void helper_bring_middle_up() {
+		while (!cube.check_square("front", 8)) {
+			cube.rotateCubeLeft();
+			cube.rotateDownClockwise();
+		}
+		cube.rotateFrontClockwise();
+		cube.rotateFrontClockwise();
+	}
+	
 	// This method arranges the corner square of the first layer
 	// After executing this method, all the corner square on the top face should be correct
 	public void first_layer_corner() {
@@ -473,6 +556,10 @@ public class Simple_solver {
 
 	// Solve method
 	public void solve() {
+		first_layer_center();
+		System.out.println("After completing all first layer middle squares:");
+		printState();
+		
 		first_layer_corner();
 		System.out.println("After completing all first layer corners:");
 		printState();
@@ -505,11 +592,12 @@ public class Simple_solver {
 
 	public static void main(String[] args) {
 		// Simple_solver solver = new Simple_solver("uuuuuuuuulllllllllfffffffffrrrrrrrrrdddddddddbbbbbbbbb");
-		String state = "obrbbbybg,gybgyygry,orrorywgr,wgyrggywg,owbwwoowb,woboorryw";
+		String state = "bwgybygyw,gorrowrbo,wwyoybbrr,orooryygo,ybbgwowwg,brrbggwgy";
 		Simple_solver solver2 = new Simple_solver(state);
 		System.out.println("Initial state:");
 		solver2.printState();
-		solver2.first_layer_corner();
+		solver2.solve();
 		solver2.printState();
+		System.out.println(solver2.getCube().getMove());
 	}
 }
