@@ -35,6 +35,28 @@ public class RubikCube {
 	public String getState() {
 		return up + left + front + right + down + back;
 	}
+	
+	// return the corresponding face
+	public String getFace(String face) {
+		if (face.equals("up")) {
+			return up;
+		}
+		else if (face.equals("down")) {
+			return down;
+		}
+		else if (face.equals("left")) {
+			return left;
+		}
+		else if (face.equals("right")) {
+			return right;
+		}
+		else if (face.equals("front")) {
+			return front;
+		}
+		else {
+			return back;
+		}
+	}
 
 	// Helper method: Rotate clockwise
 	public static String rotateClockwise(String state) {
