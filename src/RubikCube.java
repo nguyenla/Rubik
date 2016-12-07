@@ -29,7 +29,7 @@ public class RubikCube {
 
 	// return a string that contains the current state of the Rubik cube
 	public String getState() {
-		return up + left + front + right + down + back;
+		return up + "," + left + "," + front + "," + right + "," + down + "," + back;
 	}
 	
 	// return the number of moves made on the cube since resetting
@@ -305,23 +305,24 @@ public class RubikCube {
 	// Helper method: get the color at a specific position
 	public String getColor(String face, int pos) {
 		String temp = getState();
+		String[] states = temp.split(",");
 		if (face.equals("front")) {
-			temp = temp.substring(18,27);
+			temp = states[2];
 		}
 		else if (face.equals("back")) {
-			temp = temp.substring(45,54);
+			temp = states[5];
 		}
 		else if (face.equals("up")) {
-			temp = temp.substring(0,9);
+			temp = states[0];
 		}
 		else if (face.equals("down")) {
-			temp = temp.substring(36,45);
+			temp = states[4];
 		}
 		else if (face.equals("left")) {
-			temp = temp.substring(9,18);
+			temp = states[1];
 		}
 		else if (face.equals("right")) {
-			temp = temp.substring(27,36);
+			temp = states[3];
 		}
 		else {
 			System.out.println("Invalid command!");
@@ -365,7 +366,7 @@ public class RubikCube {
 	
 	// Main method to run driver tests
 	public static void main(String[] args) {
-		String initial = "uuuuuuuuulllllllllfffffffffrrrrrrrrrdddddddddbbbbbbbbb";
+		String initial = "uuuuuuuuu,lllllllll,fffffffff,rrrrrrrrr,ddddddddd,bbbbbbbbb";
 		RubikCube cube = new RubikCube(initial);
 		cube.rotateDownClockwise();
 		cube.print();

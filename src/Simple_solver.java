@@ -1,16 +1,18 @@
-import java.util.ArrayList;
 
 // This class implements a common method to solve the Rubik cube.
 // This method includes 7 simple algorithms.
 
 public class Simple_solver {
 	private RubikCube cube;
-	private ArrayList<String> steps;
 
 	// Constructor
 	public Simple_solver(String initialState) {
 		cube = new RubikCube(initialState);
-		steps = new ArrayList<String>();
+	}
+	
+	// Accessor method for the cube field
+	public RubikCube getCube() {
+		return cube;
 	}
 
 	// Helper method
@@ -51,41 +53,37 @@ public class Simple_solver {
 		return numCorrect;
 	}
 
-	// Accessor method for the cube field
-	public RubikCube getCube() {
-		return cube;
-	}
-
+	// TODO: Add comments
 	public void first_layer_center() {
 		String top = cube.getColor("up", 5);
 		int numCorrect = helper_num_correct_center_top();
 		
-		// if there is a middle square with the correct color at the top, but at the wrong location
-		if (numCorrect > 0) {
-			int i = 0;
-			while (i < 4) {
-				if (cube.check_square("up", 8) && !cube.check_square("front", 2)) {
-					i = 0;
-					cube.rotateFrontClockwise();
-					cube.rotateFrontClockwise();
-					while (!cube.check_square("front", 8)) {
-						cube.rotateCubeLeft();
-						cube.rotateDownClockwise();
-					}
-					cube.rotateFrontClockwise();
-					cube.rotateFrontClockwise();
-				}
-				else {
+		// check if there is a middle square with the correct color at the top, but at the wrong location
+		int j = 0;
+		while (j < 4) {
+			if (cube.check_square("up", 8) && !cube.check_square("front", 2)) {
+				j = 0;
+				cube.rotateFrontClockwise();
+				cube.rotateFrontClockwise();
+				
+				while (!cube.check_square("front", 8)) {
 					cube.rotateCubeLeft();
-					i++;
+					cube.rotateDownClockwise();
 				}
+				cube.rotateFrontClockwise();
+				cube.rotateFrontClockwise();
 			}
-		}
+			else {
+				cube.rotateCubeLeft();
+				j++;
+			}
+		}		
 		numCorrect = helper_num_correct_center_top();
 		
 		while (numCorrect < 4) {
 			// if a middle edge square is on the bottom
-			while (cube.getFace("down").contains(top)) {
+			while (cube.getColor("down", 2).equals(top) || cube.getColor("down", 4).equals(top) ||
+					cube.getColor("down", 6).equals(top) || cube.getColor("down", 8).equals(top)) {
 				while (!cube.getColor("down", 2).equals(top)) {
 					cube.rotateCubeLeft();;
 				}
@@ -104,28 +102,48 @@ public class Simple_solver {
 				if (cube.getColor("front", 2).equals(top)) {
 					i = 0;
 					cube.rotateFrontAntiClockwise();
-					cube.rotateLeftClockwise();
-					cube.rotateCubeRight();
-					helper_bring_middle_up();
+					if (cube.check_square("left", 6)) { // shortcut
+						cube.rotateLeftAntiClockwise();
+					}
+					else {
+						cube.rotateLeftClockwise();
+						cube.rotateCubeRight();
+						helper_bring_middle_up();
+					}
 				}
 				else if (cube.getColor("front", 4).equals(top)) {
 					i = 0;
-					cube.rotateLeftClockwise();
-					cube.rotateCubeRight();
-					helper_bring_middle_up();
+					if (cube.check_square("left", 6)) { // shortcut
+						cube.rotateLeftAntiClockwise();
+					}
+					else {
+						cube.rotateLeftClockwise();
+						cube.rotateCubeRight();
+						helper_bring_middle_up();
+					}
 				}
 				else if (cube.getColor("front", 6).equals(top)) {
 					i = 0;
-					cube.rotateRightAntiClockwise();
-					cube.rotateCubeLeft();
-					helper_bring_middle_up();
+					if (cube.check_square("right", 4)) { // shortcut
+						cube.rotateRightClockwise();
+					}
+					else {
+						cube.rotateRightAntiClockwise();
+						cube.rotateCubeLeft();
+						helper_bring_middle_up();
+					}
 				}
 				else if (cube.getColor("front", 8).equals(top)) {
 					i = 0;
 					cube.rotateFrontAntiClockwise();
-					cube.rotateRightAntiClockwise();
-					cube.rotateCubeLeft();
-					helper_bring_middle_up();
+					if (cube.check_square("right", 4)) { // shortcut
+						cube.rotateRightClockwise();
+					}
+					else {
+						cube.rotateRightAntiClockwise();
+						cube.rotateCubeLeft();
+						helper_bring_middle_up();
+					}
 				}
 				else {
 					cube.rotateCubeLeft();
@@ -135,7 +153,6 @@ public class Simple_solver {
 			numCorrect = helper_num_correct_center_top();
 		}
 	}
-
 
 	// Helper method
 	// Different from bring_left_up() and bring_right_up()
@@ -592,7 +609,8 @@ public class Simple_solver {
 
 	public static void main(String[] args) {
 		// Simple_solver solver = new Simple_solver("uuuuuuuuulllllllllfffffffffrrrrrrrrrdddddddddbbbbbbbbb");
-		String state = "bwgybygyw,gorrowrbo,wwyoybbrr,orooryygo,ybbgwowwg,brrbggwgy";
+//		String state = "bwgybygyw,gorrowrbo,wwyoybbrr,orooryygo,ybbgwowwg,brrbggwgy"; // work correctly
+		String state = "wbrwbrboo,goororgog,ygbgywrbw,gbbrrbyyw,borywwwwy,yyoggyogr";
 		Simple_solver solver2 = new Simple_solver(state);
 		System.out.println("Initial state:");
 		solver2.printState();
