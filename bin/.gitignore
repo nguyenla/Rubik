@@ -2,3 +2,11 @@
 /RubikCubeTest.class
 /SimpleSolverTest.class
 /Simple_solver.class
+/WorldState.class
+/Action.class
+/SearchNode.class
+/RubikWorldState.class
+/RubikAction.class
+/EightsPuzzleAction$Direction.class
+/EightsPuzzleAction.class
+/RubikAction$Direction.class

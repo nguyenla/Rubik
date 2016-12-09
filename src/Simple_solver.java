@@ -610,7 +610,8 @@ public class Simple_solver {
 	public static void main(String[] args) {
 		// Simple_solver solver = new Simple_solver("uuuuuuuuulllllllllfffffffffrrrrrrrrrdddddddddbbbbbbbbb");
 //		String state = "bwgybygyw,gorrowrbo,wwyoybbrr,orooryygo,ybbgwowwg,brrbggwgy"; // work correctly
-		String state = "wbrwbrboo,goororgog,ygbgywrbw,gbbrrbyyw,borywwwwy,yyoggyogr";
+	//	String state = "wbrwbrboo,goororgog,ygbgywrbw,gbbrrbyyw,borywwwwy,yyoggyogr";
+		String state = "gyyorooyo,bggwyrybg,wrywworbg,byrbgowgy,brrgowwrw,bbowbyrgo";
 		Simple_solver solver2 = new Simple_solver(state);
 		System.out.println("Initial state:");
 		solver2.printState();
