@@ -52,33 +52,58 @@ public class RubikWorldState extends WorldState {
 	@Override
 	public WorldState apply(Action action) {
 		RubikAction.Direction direction = ((RubikAction) action).getDirection();
+		RubikCube newCube = new RubikCube(cube.getState());
 		switch (direction) {
 		case UpClockwise:
-			cube.rotateUpClockwise();
+			newCube.rotateUpClockwise();
+			System.out.println("Rotating Up clockwise");
+			break;
 		case UpAntiClockwise:
-			cube.rotateUpAntiClockwise();
+			newCube.rotateUpAntiClockwise();
+			System.out.println("Rotating Up anti-clockwise");
+			break;
 		case DownClockwise:
-			cube.rotateDownClockwise();
+			newCube.rotateDownClockwise();
+			System.out.println("Rotating Down clockwise");
+			break;
 		case DownAntiClockwise:
-			cube.rotateDownAntiClockwise();
+			newCube.rotateDownAntiClockwise();
+			System.out.println("Rotating Down anti-clockwise");
+			break;
 		case LeftClockwise:
-			cube.rotateLeftClockwise();
+			newCube.rotateLeftClockwise();
+			System.out.println("Rotating Left clockwise");
+			break;
 		case LeftAntiClockwise:
-			cube.rotateLeftAntiClockwise();
+			newCube.rotateLeftAntiClockwise();
+			System.out.println("Rotating Left anti-clockwise");
+			break;
 		case RightClockwise:
-			cube.rotateRightClockwise();
+			newCube.rotateRightClockwise();
+			System.out.println("Rotating Right clockwise");
+			break;
 		case RightAntiClockwise:
-			cube.rotateRightAntiClockwise();
+			newCube.rotateRightAntiClockwise();
+			System.out.println("Rotating Right anti-clockwise");
+			break;
 		case BackClockwise:
-			cube.rotateBackClockwise();
+			newCube.rotateBackClockwise();
+			System.out.println("Rotating Back clockwise");
+			break;
 		case BackAntiClockwise:
-			cube.rotateBackAntiClockwise();
+			newCube.rotateBackAntiClockwise();
+			System.out.println("Rotating Back anti-clockwise");
+			break;
 		case FrontClockwise:
-			cube.rotateFrontClockwise();
+			newCube.rotateFrontClockwise();
+			System.out.println("Rotating Front clockwise");
+			break;
 		case FrontAntiClockwise:
-			cube.rotateFrontAntiClockwise();
+			newCube.rotateFrontAntiClockwise();
+			System.out.println("Rotating Front anti-clockwise");
+			break;
 		}
-		return new RubikWorldState(cube);
+		return new RubikWorldState(newCube);
 	}
 
 	/* (non-Javadoc)
@@ -105,7 +130,7 @@ public class RubikWorldState extends WorldState {
 
 	@Override
 	public boolean equals(Object other) {
-		// TODO Auto-generated method stub
-		return false;
+		RubikWorldState otherState = (RubikWorldState) other;
+		return this.cube.getState().equals(otherState.getCube().getState());
 	}
 }

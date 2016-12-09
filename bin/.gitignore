@@ -10,3 +10,9 @@
 /EightsPuzzleAction$Direction.class
 /EightsPuzzleAction.class
 /RubikAction$Direction.class
+/AStarAbstract.class
+/ClassicalSearch$SearchType.class
+/ClassicalSearch.class
+/RubikMain.class
+/EightsPuzzleMain.class
+/BreadthFirstSearchNode.class
