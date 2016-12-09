@@ -12,7 +12,7 @@ import java.util.PriorityQueue;
  * @version September 2014
  */
 public class ClassicalSearch {
-	private static final boolean VERBOSE = true;
+	private static final boolean VERBOSE = false;
 
 	/**
 	 * Specifies whether tree search or graph search is used.
@@ -139,6 +139,7 @@ public class ClassicalSearch {
 				if (VERBOSE) {
 					System.out.println("Solution found");
 				}
+				System.out.println(currentNode.pathDetails());
 				break;
 			}
 

@@ -56,51 +56,39 @@ public class RubikWorldState extends WorldState {
 		switch (direction) {
 		case UpClockwise:
 			newCube.rotateUpClockwise();
-			System.out.println("Rotating Up clockwise");
 			break;
 		case UpAntiClockwise:
 			newCube.rotateUpAntiClockwise();
-			System.out.println("Rotating Up anti-clockwise");
 			break;
 		case DownClockwise:
 			newCube.rotateDownClockwise();
-			System.out.println("Rotating Down clockwise");
 			break;
 		case DownAntiClockwise:
 			newCube.rotateDownAntiClockwise();
-			System.out.println("Rotating Down anti-clockwise");
 			break;
 		case LeftClockwise:
 			newCube.rotateLeftClockwise();
-			System.out.println("Rotating Left clockwise");
 			break;
 		case LeftAntiClockwise:
 			newCube.rotateLeftAntiClockwise();
-			System.out.println("Rotating Left anti-clockwise");
 			break;
 		case RightClockwise:
 			newCube.rotateRightClockwise();
-			System.out.println("Rotating Right clockwise");
 			break;
 		case RightAntiClockwise:
 			newCube.rotateRightAntiClockwise();
-			System.out.println("Rotating Right anti-clockwise");
 			break;
 		case BackClockwise:
 			newCube.rotateBackClockwise();
-			System.out.println("Rotating Back clockwise");
 			break;
 		case BackAntiClockwise:
 			newCube.rotateBackAntiClockwise();
-			System.out.println("Rotating Back anti-clockwise");
 			break;
 		case FrontClockwise:
 			newCube.rotateFrontClockwise();
-			System.out.println("Rotating Front clockwise");
 			break;
 		case FrontAntiClockwise:
 			newCube.rotateFrontAntiClockwise();
-			System.out.println("Rotating Front anti-clockwise");
 			break;
 		}
 		return new RubikWorldState(newCube);
