@@ -50,9 +50,11 @@ public class RubikMain {
 		String state7 = "ggrbbryyw,bywrooroo,rrgbywbyo,rbbrroywo,ywwywgbbg,yoowggwgg";
 		
 		String stateU = "gyyorooyo,bggwyrybg,wrywworbg,byrbgowgy,brrgowwrw,bbowbyrgo"; // <unknown> rotations away
-		RubikCube initialCube = new RubikCube(state7);
+		RubikCube initialCube = new RubikCube(state2);
 		RubikWorldState initial_state = new RubikWorldState(initialCube);
-		SearchNode initial_node = new DepthFirstSearchNode(null, initial_state, null);;
+		SearchNode initial_node = new BreadthFirstSearchNode(null, initial_state, null);
+		
+		SearchNode AStarNode = new AStar3DManhattan(null, initial_state, null);
 
 		//////////////////////////////////////////////////////////////////
 		// Process command line arguments
@@ -102,7 +104,7 @@ public class RubikMain {
 		// Run the search.
 		//////////////////////////////////////////////////////////////////
 		
-		ClassicalSearch classical_search = new ClassicalSearch(initial_node,
+		ClassicalSearch classical_search = new ClassicalSearch(AStarNode,
 				goal_state, maxNodes, maxDepth, searchType);
 
 		if (classical_search.search()) {

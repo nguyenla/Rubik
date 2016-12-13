@@ -12,8 +12,8 @@ public class AStar3DManhattan extends AStarAbstract {
 	 * @param state
 	 * @param action
 	 */
-	public AStar3DManhattan(SearchNode parent, WorldState state, Action action, WorldState goal) {
-		super(parent, state, action, goal);
+	public AStar3DManhattan(SearchNode parent, WorldState state, Action action) {
+		super(parent, state, action);
 
 		// if this isn't the root of the tree, set the number of moves to the parent's number plus 1
 		if (parent!=null) {
@@ -21,18 +21,41 @@ public class AStar3DManhattan extends AStarAbstract {
 		}
 
 		// set the cost for this node: the number of moves it took to get to this state + the heuristic
-		cost = this.getNumMoves() + this.findHeuristics(goal, state);
+		cost = this.getNumMoves() + this.findHeuristics(state);
+		System.out.println(cost);
 	}
 
 	/**
 	 * Returns the 3D Manhattan heuristic for the current node
 	 */
 	@Override
-	public double findHeuristics(WorldState goal, WorldState current) {
-		//the total number of moves 
-		double sum = 0;
+	public double findHeuristics(WorldState current) { 
+		double totalEdge = 0;
+		double totalCorner = 0;
 		String state = ((RubikWorldState) current).getCube().getState();
-		return sum;
+		RubikCube cube = new RubikCube(state);
+		for (int i = 0; i < 4; i++) {
+			cube.rotateCubeRight();
+			totalEdge += manhattan_edge(cube);
+			totalCorner += manhattan_corner(cube);
+		}
+		cube.rotateCubeUp();
+		cube.rotateCubeUp();
+		for (int i = 0; i < 4; i++) {
+			cube.rotateCubeRight();
+			totalEdge += manhattan_edge(cube);
+			totalCorner += manhattan_corner(cube);
+		}
+		cube.rotateCubeUp();
+		cube.rotateCubeRight();
+		for (int i = 0; i < 4; i++) {
+			cube.rotateCubeUp();
+			totalEdge += manhattan_edge(cube);
+		}
+		cube.rotateCubeLeft();
+		cube.rotateCubeDown();
+		
+		return (totalEdge + totalCorner) / 4 + this.getNumMoves();
 	}
 
 	/**
@@ -43,7 +66,7 @@ public class AStar3DManhattan extends AStarAbstract {
 	 */
 	@Override
 	protected SearchNode createChild(WorldState childState, Action action) {
-		return new AStar3DManhattan(this, childState, action, this.getGoalState());
+		return new AStar3DManhattan(this, childState, action);
 	}
 
 	// Helper function
@@ -175,7 +198,7 @@ public class AStar3DManhattan extends AStarAbstract {
 		String colorFront = cube.getColor("front", 5);
 		String colorLeft = cube.getColor("left", 5);
 		String colorRight = cube.getColor("right", 5);
-
+		
 		// Case 1: up - left - front
 		if (color1.equals(colorUp) && color2.equals(colorLeft) && color3.equals(colorFront)) {
 			return 0;

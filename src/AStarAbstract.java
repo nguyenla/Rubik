@@ -9,7 +9,7 @@ import java.util.Collection;
  */
 public abstract class AStarAbstract extends SearchNode {
 	private int numMoves; // the number of moves to get to the current state
-	private WorldState goalState; // the goal state which we are trying to base the heuristic off
+	// private WorldState goalState; // the goal state which we are trying to base the heuristic off
 	
 	/**
 	 * Creates a new node with the given parent, state, and action.
@@ -26,9 +26,9 @@ public abstract class AStarAbstract extends SearchNode {
 	 * 			  The goal state that is used to compare against the current state
 	 * 			  in order to calculate the heuristic.
 	 */
-	public AStarAbstract(SearchNode parent, WorldState state, Action action, WorldState goal) {
+	public AStarAbstract(SearchNode parent, WorldState state, Action action) {
 		super(parent, state, action);
-		goalState = goal;
+		// goalState = goal;
 	}
 	
 	/**
@@ -41,9 +41,9 @@ public abstract class AStarAbstract extends SearchNode {
 	/**
 	 * Returns the goalState of the node.
 	 */
-	public WorldState getGoalState() {
-		return goalState;
-	}
+//	public WorldState getGoalState() {
+//		return goalState;
+//	}
 	
 	/**
 	 * Sets the number of moves that it took to get to the current state.
@@ -55,7 +55,7 @@ public abstract class AStarAbstract extends SearchNode {
 	/**
 	 * Returns the value of the heuristic function computed for this node.
 	 */
-	protected abstract double findHeuristics(WorldState goal, WorldState current);
+	protected abstract double findHeuristics(WorldState current);
 	
 	//protected abstract SearchNode createChild(WorldState childState, Action action, WorldState goal);
 }

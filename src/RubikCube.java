@@ -363,8 +363,8 @@ public class RubikCube {
 	public void rotateCubeUp() {
 		String temp = front;
 		front = down;
-		down = back;
-		back = up;
+		down = rotateAntiClockwise(rotateAntiClockwise(back));
+		back = rotateAntiClockwise(rotateAntiClockwise(up));
 		up = temp;
 		left = rotateAntiClockwise(left);
 		right = rotateClockwise(right);
@@ -374,8 +374,8 @@ public class RubikCube {
 	public void rotateCubeDown() {
 		String temp = front;
 		front = up;
-		up = back;
-		back = down;
+		up = rotateAntiClockwise(rotateAntiClockwise(back));
+		back = rotateAntiClockwise(rotateAntiClockwise(down));
 		down = temp;
 		left = rotateClockwise(left);
 		right = rotateAntiClockwise(right);
