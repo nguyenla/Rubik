@@ -28,9 +28,10 @@ public class AStar3DManhattan extends AStarAbstract {
 	 * Returns the 3D Manhattan heuristic for the current node
 	 */
 	@Override
-	public int findHeuristics(WorldState goal, WorldState current) {
+	public double findHeuristics(WorldState goal, WorldState current) {
 		//the total number of moves 
-		int sum = 0; 
+		double sum = 0;
+		String state = ((RubikWorldState) current).getCube().getState();
 		return sum;
 	}
 

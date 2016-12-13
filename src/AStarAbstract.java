@@ -55,7 +55,7 @@ public abstract class AStarAbstract extends SearchNode {
 	/**
 	 * Returns the value of the heuristic function computed for this node.
 	 */
-	protected abstract int findHeuristics(WorldState goal, WorldState current);
+	protected abstract double findHeuristics(WorldState goal, WorldState current);
 	
 	//protected abstract SearchNode createChild(WorldState childState, Action action, WorldState goal);
 }

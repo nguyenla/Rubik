@@ -31,17 +31,17 @@ public class RubikCube {
 	public String getState() {
 		return up + "," + left + "," + front + "," + right + "," + down + "," + back;
 	}
-	
+
 	// return the number of moves made on the cube since resetting
 	public int getMove() {
 		return move;
 	}
-	
+
 	// reset the number of moves to 0
 	public void resetMove() {
 		move = 0;
 	}
-	
+
 	// return the corresponding face
 	public String getFace(String face) {
 		if (face.equals("up")) {
@@ -327,7 +327,7 @@ public class RubikCube {
 		else {
 			System.out.println("Invalid command!");
 		}
-		
+
 		if (1 <= pos && pos <=9) {
 			return temp.charAt(pos-1) + "";
 		}
@@ -347,7 +347,7 @@ public class RubikCube {
 		up = rotateAntiClockwise(up);
 		down = rotateClockwise(down);
 	}
-	
+
 	// This method rotates the whole cube to the left
 	public void rotateCubeLeft() {
 		String temp = front;
@@ -358,12 +358,35 @@ public class RubikCube {
 		up = rotateClockwise(up);
 		down = rotateAntiClockwise(down);
 	}
-	
+
+	// This method rotates the whole cube up, so that the front face becomes the up face
+	public void rotateCubeUp() {
+		String temp = front;
+		front = down;
+		down = back;
+		back = up;
+		up = temp;
+		left = rotateAntiClockwise(left);
+		right = rotateClockwise(right);
+	}
+
+	// This method rotates the whole cube down, so that the front face becomes the down face
+	public void rotateCubeDown() {
+		String temp = front;
+		front = up;
+		up = back;
+		back = down;
+		down = temp;
+		left = rotateClockwise(left);
+		right = rotateAntiClockwise(right);
+	}
+
+
 	// Check of a specific square matches the color of the face it is on
 	public boolean check_square(String face, int pos) {
 		return getColor(face, pos).equals(getColor(face, 5));
 	}
-	
+
 	// Main method to run driver tests
 	public static void main(String[] args) {
 		String initial = "uuuuuuuuu,lllllllll,fffffffff,rrrrrrrrr,ddddddddd,bbbbbbbbb";
