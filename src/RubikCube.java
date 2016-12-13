@@ -1,3 +1,5 @@
+import java.util.Random;
+
 /// This class represents a Rubik cube with six fields representing six faces
 /// and 12 methods corresponding to 12 rotations to obtain a different state.
 
@@ -385,6 +387,54 @@ public class RubikCube {
 	// Check of a specific square matches the color of the face it is on
 	public boolean check_square(String face, int pos) {
 		return getColor(face, pos).equals(getColor(face, 5));
+	}
+	
+	// This method randomly shuffles the RubikCube by the specified number of moves
+	public void random_shuffle(int moves) {
+		Random generator = new Random();
+		for (int i = 0; i < moves; i++) {
+			int randomNum = generator.nextInt(12);
+			switch (randomNum) {
+			case 0:
+				rotateUpClockwise();
+				break;
+			case 1:
+				rotateUpAntiClockwise();
+				break;
+			case 2:
+				rotateDownClockwise();
+				break;
+			case 3:
+				rotateDownAntiClockwise();
+				break;
+			case 4:
+				rotateLeftClockwise();
+				break;
+			case 5:
+				rotateLeftAntiClockwise();
+				break;
+			case 6:
+				rotateRightClockwise();
+				break;
+			case 7:
+				rotateRightAntiClockwise();
+				break;
+			case 8:
+				rotateBackClockwise();
+				break;
+			case 9:
+				rotateBackAntiClockwise();
+				break;
+			case 10:
+				rotateFrontClockwise();
+				break;
+			case 11:
+				rotateFrontAntiClockwise();
+				break;
+			default:
+				rotateUpClockwise();
+			}
+		}
 	}
 
 	// Main method to run driver tests

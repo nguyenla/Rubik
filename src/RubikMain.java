@@ -41,6 +41,7 @@ public class RubikMain {
 		ClassicalSearch.SearchType searchType = ClassicalSearch.SearchType.Tree;
 		
 		// TEST CASES
+		String solved_state = "bbbbbbbbb,ooooooooo,yyyyyyyyy,rrrrrrrrr,wwwwwwwww,ggggggggg";
 		String state1 = "bbybbybby,ooooooooo,yywyywyyw,rrrrrrrrr,wwgwwgwwg,bggbggbgg"; // 1 rotation away
 		String state2 = "bbbbbbggg,ggwoooooo,ooobyybyy,byyrrrrrr,ywwywwyww,rrrggwggw"; // 2 rotations away
 		String state3 = "obbbbbbgg,woogoogoo,yooyyyyyy,byyrrrrrr,wwwwwwrww,rrgggbggb"; // 3 rotations away
@@ -50,12 +51,15 @@ public class RubikMain {
 		String state7 = "ggrbbryyw,bywrooroo,rrgbywbyo,rbbrroywo,ywwywgbbg,yoowggwgg";
 		
 		String stateU = "gyyorooyo,bggwyrybg,wrywworbg,byrbgowgy,brrgowwrw,bbowbyrgo"; // <unknown> rotations away
-		RubikCube initialCube = new RubikCube(state2);
+		RubikCube initialCube = new RubikCube(solved_state);
+		initialCube.random_shuffle(10);
 		RubikWorldState initial_state = new RubikWorldState(initialCube);
 		SearchNode initial_node = new BreadthFirstSearchNode(null, initial_state, null);
 		
 		SearchNode AStarNode = new AStar3DManhattan(null, initial_state, null);
 
+		ClassicalSearch classical_search = new ClassicalSearch(AStarNode,
+				goal_state, maxNodes, maxDepth, searchType);
 		//////////////////////////////////////////////////////////////////
 		// Process command line arguments
 		//////////////////////////////////////////////////////////////////
@@ -104,8 +108,7 @@ public class RubikMain {
 		// Run the search.
 		//////////////////////////////////////////////////////////////////
 		
-		ClassicalSearch classical_search = new ClassicalSearch(AStarNode,
-				goal_state, maxNodes, maxDepth, searchType);
+		
 
 		if (classical_search.search()) {
 			System.out.println("Solution found.");

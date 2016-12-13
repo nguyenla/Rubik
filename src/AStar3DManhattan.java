@@ -22,7 +22,7 @@ public class AStar3DManhattan extends AStarAbstract {
 
 		// set the cost for this node: the number of moves it took to get to this state + the heuristic
 		cost = this.getNumMoves() + this.findHeuristics(state);
-		System.out.println(cost);
+		//System.out.println(cost);
 	}
 
 	/**
