@@ -1,8 +1,7 @@
 import java.util.ArrayList;
 
 /**
- * An RubikWorldState object represents a possible state for a
- * Rubik cube.
+ * An RubikWorldState object represents a possible state for a Rubik cube.
  * 
  * @author Lam Nguyen, Sasha Jouravlev, Dickinson College
  * @author Some code copied from Prof. Grant Braught; used with permission.

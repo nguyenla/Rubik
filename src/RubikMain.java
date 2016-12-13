@@ -43,7 +43,7 @@ public class RubikMain {
 				initialNode = new DepthFirstSearchNode(null, initial_state, null);
 			}
 			else if (algorithm.equals("as3d")) {
-				initialNode = new AStar3DManhattanImproved(null, initial_state, null);
+				initialNode = new AStar3DManhattan(null, initial_state, null);
 			}
 			else if (algorithm.equals("as3dim")) {
 				initialNode = new AStar3DManhattanImproved(null, initial_state, null);

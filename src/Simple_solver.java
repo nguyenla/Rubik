@@ -9,7 +9,12 @@ public class Simple_solver {
 	public Simple_solver(String initialState) {
 		cube = new RubikCube(initialState);
 	}
-	
+
+	// Constructor 2
+	public Simple_solver(RubikCube initialCube) {
+		cube = initialCube;
+	}
+
 	// Accessor method for the cube field
 	public RubikCube getCube() {
 		return cube;
@@ -33,7 +38,7 @@ public class Simple_solver {
 		}
 		return numCorrect;
 	}
-	
+
 	// Helper method
 	// This method counts the number of corners on the top face with the correct color
 	public int helper_num_correct_corners_top() {
@@ -53,11 +58,11 @@ public class Simple_solver {
 		return numCorrect;
 	}
 
-	// TODO: Add comments
+	// STEP 1 - Achieve sub-goal 1: a cross of the same color on any face
 	public void first_layer_center() {
 		String top = cube.getColor("up", 5);
 		int numCorrect = helper_num_correct_center_top();
-		
+
 		// check if there is a middle square with the correct color at the top, but at the wrong location
 		int j = 0;
 		while (j < 4) {
@@ -65,7 +70,7 @@ public class Simple_solver {
 				j = 0;
 				cube.rotateFrontClockwise();
 				cube.rotateFrontClockwise();
-				
+
 				while (!cube.check_square("front", 8)) {
 					cube.rotateCubeLeft();
 					cube.rotateDownClockwise();
@@ -79,7 +84,7 @@ public class Simple_solver {
 			}
 		}		
 		numCorrect = helper_num_correct_center_top();
-		
+
 		while (numCorrect < 4) {
 			// if a middle edge square is on the bottom
 			while (cube.getColor("down", 2).equals(top) || cube.getColor("down", 4).equals(top) ||
@@ -95,7 +100,7 @@ public class Simple_solver {
 				cube.rotateFrontClockwise();
 				numCorrect = helper_num_correct_center_top();
 			}
-			
+
 			// if a middle edge square is on one of (back, front, left, right)
 			int i = 0;
 			while (i < 4) {
@@ -164,9 +169,9 @@ public class Simple_solver {
 		cube.rotateFrontClockwise();
 		cube.rotateFrontClockwise();
 	}
-	
+
+	// STEP 2 - Achieve sub-goal 2: all the corner square on the top face should be correct
 	// This method arranges the corner square of the first layer
-	// After executing this method, all the corner square on the top face should be correct
 	public void first_layer_corner() {
 		int numCorrect = helper_num_correct_corners_top(); // number of correct corners on the top face
 		String top = cube.getColor("up", 5);
@@ -217,7 +222,7 @@ public class Simple_solver {
 				numCorrect = helper_num_correct_corners_top();
 			}
 		}
-		
+
 		// TODO: implement swapping if necessary
 	}
 
@@ -359,7 +364,8 @@ public class Simple_solver {
 			}
 		}
 	}
-	// This method put all the squares on the second layer in the correct position
+
+	// STEP 3 - Achieve sub-goal 3: put all the squares on the second layer in the correct position
 	public void second_layer() {
 		helper_second_layer();
 		while (!(cube.check_square("front", 4) && cube.check_square("front", 6) &&
@@ -387,7 +393,7 @@ public class Simple_solver {
 		cube.rotateRightClockwise();
 	}
 
-	// Create a cross of the same color in the bottom face of the cube
+	// STEP 4 - Achieve sub-goal 4: Create a cross of the same color in the bottom face of the cube
 	public void bottom_cross() {
 		// make sure there is one square with the right color
 		if (!cube.check_square("down", 2) && !cube.check_square("down", 4) 
@@ -433,7 +439,7 @@ public class Simple_solver {
 		cube.rotateDownClockwise();
 	}
 
-	// This method makes sure that the center square of the bottom layer of each face has the correct color
+	// STEP 5 - Achieve sub-goal 5: The center square of the bottom layer of each face has the correct color
 	public void bottom_layer_edge() {
 		while (!cube.check_square("front", 8)) {
 			cube.rotateDownClockwise();
@@ -514,6 +520,7 @@ public class Simple_solver {
 		cube.rotateRightClockwise();
 	}
 
+	// STEP 6 - Achieve sub-goal 6: Bring all the corner squares of the bottom layers to their correct locations
 	public void bottom_layer_corner_location() {
 		// Set up the desired orientation
 		for (int i = 0; i < 4; i++) {
@@ -540,7 +547,7 @@ public class Simple_solver {
 		}
 	}
 
-	// Final step
+	// STEP 7 - Achieve sub-goal 7 (the final goal): Solve the cube 
 	public void bottom_layer() {
 		// While the cube is not solved
 		while (!cube.check_square("front", 9) || !cube.check_square("left", 9) || !cube.check_square("right", 9) || !cube.check_square("back", 9)) {
@@ -571,16 +578,17 @@ public class Simple_solver {
 		}
 	}
 
-	// Solve method
+	// The solve() method: putting everything together
+	// Use all the 7 helper methods to solve a Rubik cube from any state
 	public void solve() {
 		first_layer_center();
 		System.out.println("After completing all first layer middle squares:");
 		printState();
-		
+
 		first_layer_corner();
 		System.out.println("After completing all first layer corners:");
 		printState();
-		
+
 		second_layer();
 		System.out.println("After second layer:");
 		printState();
@@ -602,29 +610,28 @@ public class Simple_solver {
 		printState();
 	}
 
-	// Print the current state of the rubik cube
+	// Print the current state of the Rubik cube
 	public void printState() {
 		cube.print();
 	}
 
 	public static void main(String[] args) {
 		// Simple_solver solver = new Simple_solver("uuuuuuuuulllllllllfffffffffrrrrrrrrrdddddddddbbbbbbbbb");
-//		String state = "bwgybygyw,gorrowrbo,wwyoybbrr,orooryygo,ybbgwowwg,brrbggwgy"; // work correctly
-	//	String state = "wbrwbrboo,goororgog,ygbgywrbw,gbbrrbyyw,borywwwwy,yyoggyogr";
-//		String state = "gyyorooyo,bggwyrybg,wrywworbg,byrbgowgy,brrgowwrw,bbowbyrgo";
-		String state5 = "rryybywyy,yoooobogy,gwwyyowww,rrbgrwrbr,oogrwggwg,obbrgbbgb";
-//		Simple_solver solver2 = new Simple_solver(state5);
-//		System.out.println("Initial state:");
-//		solver2.printState();
-//		solver2.solve();
-//		solver2.printState();
-//		System.out.println(solver2.getCube().getMove());
-		Simple_solver solver2 = new Simple_solver(state5);
+		// String state = "bwgybygyw,gorrowrbo,wwyoybbrr,orooryygo,ybbgwowwg,brrbggwgy"; // work correctly
+		// String state = "wbrwbrboo,goororgog,ygbgywrbw,gbbrrbyyw,borywwwwy,yyoggyogr";
+		// String state = "gyyorooyo,bggwyrybg,wrywworbg,byrbgowgy,brrgowwrw,bbowbyrgo";
+		// String state5 = "rryybywyy,yoooobogy,gwwyyowww,rrbgrwrbr,oogrwggwg,obbrgbbgb";
+		String solved_state = "bbbbbbbbb,ooooooooo,yyyyyyyyy,rrrrrrrrr,wwwwwwwww,ggggggggg";
+		RubikCube cube = new RubikCube(solved_state);
+		cube.random_shuffle(1000);
+		cube.resetMove();
+		Simple_solver solver2 = new Simple_solver(cube);
+		
 		long startTime = System.nanoTime();
 		solver2.solve();
-		
 		long endTime = System.nanoTime();
 		double timeTaken = ((double) (endTime - startTime)) / 1000000;
+		
 		System.out.println(timeTaken);
 		System.out.println(solver2.getCube().getMove());
 	}

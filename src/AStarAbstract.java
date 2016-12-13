@@ -1,4 +1,3 @@
-import java.util.Collection;
 
 /**
  * An abstract class that is extended by AStarNumTiles and AStarManhattan.
