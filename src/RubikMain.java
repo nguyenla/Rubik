@@ -47,19 +47,66 @@ public class RubikMain {
 		String state3 = "obbbbbbgg,woogoogoo,yooyyyyyy,byyrrrrrr,wwwwwwrww,rrgggbggb"; // 3 rotations away
 		String state4 = "bbbbbbbbb,rrrooorrr,gggyyyggg,ooorrrooo,wwwwwwwww,yyygggyyy"; // 4 rotations away
 		String state5 = "bbyobyoby,owwwoogoo,yywbywbyw,rrrrrgrrg,ywgywgrrw,bggoggobb"; // 5 rotations away
-//		String state6 = "rryybywyy,yoooobogy,gwwyyowww,rrbgrwrbr,oogrwggwg,obbrgbbgb"; // 6 rotations away, looking very shuffled
-		String state7 = "ggrbbryyw,bywrooroo,rrgbywbyo,rbbrroywo,ywwywgbbg,yoowggwgg";
+		String state6 = "rryybywyy,yoooobogy,gwwyyowww,rrbgrwrbr,oogrwggwg,obbrgbbgb"; // 6 rotations away, looking very shuffled
+		//String state7 = "ggrbbryyw,bywrooroo,rrgbywbyo,rbbrroywo,ywwywgbbg,yoowggwgg";
 		
-		String stateU = "gyyorooyo,bggwyrybg,wrywworbg,byrbgowgy,brrgowwrw,bbowbyrgo"; // <unknown> rotations away
-		RubikCube initialCube = new RubikCube(solved_state);
-		initialCube.random_shuffle(10);
-		RubikWorldState initial_state = new RubikWorldState(initialCube);
-		SearchNode initial_node = new BreadthFirstSearchNode(null, initial_state, null);
-		
-		SearchNode AStarNode = new AStar3DManhattan(null, initial_state, null);
+		//String stateU = "gyyorooyo,bggwyrybg,wrywworbg,byrbgowgy,brrgowwrw,bbowbyrgo"; // <unknown> rotations away
+//		RubikCube initialCube = new RubikCube(state1);
+//		
+////		initialCube.random_shuffle(10);
+//		RubikWorldState initial_state = new RubikWorldState(initialCube);
+//		SearchNode initialNode = new BreadthFirstSearchNode(null, initial_state, null);
+//		SearchNode AStarNode = new AStar3DManhattan(null, initial_state, null);
 
-		ClassicalSearch classical_search = new ClassicalSearch(AStarNode,
-				goal_state, maxNodes, maxDepth, searchType);
+		double totalTime = 0;
+		double totalExpanded = 0;
+		double totalGenerated = 0;
+
+		for (int i = 0 ; i < 100; i++) {
+			RubikCube initialCube = new RubikCube(solved_state);
+			int shuffle = 1;
+			initialCube.random_shuffle(shuffle);
+			RubikWorldState initial_state = new RubikWorldState(initialCube);
+			SearchNode initialNode = new DepthFirstSearchNode(null, initial_state, null);
+			ClassicalSearch classical_search = new ClassicalSearch(initialNode,
+					goal_state, maxNodes, maxDepth, searchType);
+			long startTime = System.nanoTime();
+			if (classical_search.search()) {
+				System.out.println("Solution found.");
+			} else {
+				System.out.println("No solution found.");
+			}
+			
+			long endTime = System.nanoTime();
+			double timeTaken = ((double) (endTime - startTime)) / 1000000;
+			totalTime += timeTaken;
+			totalExpanded += classical_search.getExpandedNodes();
+			totalGenerated += classical_search.getGeneratedNodes();
+		}
+		
+		System.out.println("Average time taken is " + totalTime / 100);
+		System.out.println("Average number of nodes expanded is " + totalExpanded/100);
+		System.out.println("Average number of nodes generated is " + totalGenerated/100);
+		
+		
+		
+		
+		
+		
+//		long startTime = System.nanoTime();
+//		ClassicalSearch classical_search = new ClassicalSearch(initialNode,
+//				goal_state, maxNodes, maxDepth, searchType);
+//		if (classical_search.search()) {
+//			System.out.println("Solution found.");
+//		} else {
+//			System.out.println("No solution found.");
+//		}
+//		System.out.println("Expanded nodes: " + classical_search.getExpandedNodes());
+//		System.out.println("Generated nodes: " + classical_search.getGeneratedNodes());
+//		
+//		long endTime = System.nanoTime();
+//		double timeTaken = ((double) (endTime - startTime)) / 1000000;
+//		System.out.println("Total time taken: " + timeTaken + " milliseconds");
 		//////////////////////////////////////////////////////////////////
 		// Process command line arguments
 		//////////////////////////////////////////////////////////////////
@@ -107,17 +154,5 @@ public class RubikMain {
 		//////////////////////////////////////////////////////////////////
 		// Run the search.
 		//////////////////////////////////////////////////////////////////
-		
-		
-
-		if (classical_search.search()) {
-			System.out.println("Solution found.");
-		} else {
-			System.out.println("No solution found.");
-		}
-		System.out.println("Expanded nodes: "
-				+ classical_search.getExpandedNodes());
-		System.out.println("Generated nodes: "
-				+ classical_search.getGeneratedNodes());
 	}
 }

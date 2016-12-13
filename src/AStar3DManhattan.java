@@ -303,7 +303,6 @@ public class AStar3DManhattan extends AStarAbstract {
 			return 3;
 		}
 		
-
 		return Integer.MAX_VALUE;
 	}
 }
