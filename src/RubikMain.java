@@ -1,156 +1,138 @@
 /**
- * EightsPuzzleMain is a class containing only static methods, useful for
- * running searches on 8-puzzle-like problems. A main method is included for
- * running these searches from the command line.
+ * RubikMain is a class containing only static methods for running experiment on solving Rubik cube.
+ * A main method is included for running these searches from the command line.
  * 
- * @author John MacCormick, Dickinson College
- * @version September 2014
+ * @author Lam Nguyen, Sasha Jouravlev, Dickinson College
+ * @version December 2016
  */
 public class RubikMain {
-
 	/**
 	 * The state of a solved cube
 	 */
 	public static final RubikCube goalCube = new RubikCube("bbbbbbbbb,ooooooooo,yyyyyyyyy,rrrrrrrrr,wwwwwwwww,ggggggggg"); 
 
 	private static void usage() {
-		System.out.println("usage: java RubikMain bfs|dfs|ids|as1|as2 tree|graph maxNodes maxDepth");
+		System.out.println("Please specify the following 6 arguments:");
+		System.out.println("The search algorithm to use, which can be: bfs | dfs | as3D | as3Dimproved");
+		System.out.println("Type of search to use, which can be: tree | graph");
+		System.out.println("The number of random shuffles");
+		System.out.println("The maximum number of nodes to be expanded");
+		System.out.println("The maximum depth of the search tree");
+		System.out.println("The number of repetitions to run in the experiment");
 		System.exit(-1);
 	}
 
-	/**
-	 * Runs a search on a cube, printing some details about
-	 * the solution.
-	 * 
-	 * @param args
-	 *            The command line arguments are: bfs|dfs|ids|as1|as2 tree|graph
-	 *            maxNodes maxDepth. These represent, respectively, the search
-	 *            algorithm to be used, the type of search to be used, the
-	 *            maximum number of nodes to be expanded, and the maximum depth
-	 *            of the search tree.
-	 */
-	public static void main(String[] args) {
-		//////////////////////////////////////////////////////////////////
-		// Set some parameters 
-		//////////////////////////////////////////////////////////////////
-		
-		// The goal
-		RubikWorldState goal_state = new RubikWorldState(goalCube);
-		int maxNodes = 200000000;
-		int maxDepth = 20;
-		ClassicalSearch.SearchType searchType = ClassicalSearch.SearchType.Tree;
-		
-		// TEST CASES
-		String solved_state = "bbbbbbbbb,ooooooooo,yyyyyyyyy,rrrrrrrrr,wwwwwwwww,ggggggggg";
-		String state1 = "bbybbybby,ooooooooo,yywyywyyw,rrrrrrrrr,wwgwwgwwg,bggbggbgg"; // 1 rotation away
-		String state2 = "bbbbbbggg,ggwoooooo,ooobyybyy,byyrrrrrr,ywwywwyww,rrrggwggw"; // 2 rotations away
-		String state3 = "obbbbbbgg,woogoogoo,yooyyyyyy,byyrrrrrr,wwwwwwrww,rrgggbggb"; // 3 rotations away
-		String state4 = "bbbbbbbbb,rrrooorrr,gggyyyggg,ooorrrooo,wwwwwwwww,yyygggyyy"; // 4 rotations away
-		String state5 = "bbyobyoby,owwwoogoo,yywbywbyw,rrrrrgrrg,ywgywgrrw,bggoggobb"; // 5 rotations away
-		String state6 = "rryybywyy,yoooobogy,gwwyyowww,rrbgrwrbr,oogrwggwg,obbrgbbgb"; // 6 rotations away, looking very shuffled
-		//String state7 = "ggrbbryyw,bywrooroo,rrgbywbyo,rbbrroywo,ywwywgbbg,yoowggwgg";
-		
-		//String stateU = "gyyorooyo,bggwyrybg,wrywworbg,byrbgowgy,brrgowwrw,bbowbyrgo"; // <unknown> rotations away
-//		RubikCube initialCube = new RubikCube(state1);
-//		
-////		initialCube.random_shuffle(10);
-//		RubikWorldState initial_state = new RubikWorldState(initialCube);
-//		SearchNode initialNode = new BreadthFirstSearchNode(null, initial_state, null);
-//		SearchNode AStarNode = new AStar3DManhattan(null, initial_state, null);
-
+	public static void experiment(String algorithm, ClassicalSearch.SearchType searchType, int shuffle, int maxNodes, int maxDepth, int iterations) {
 		double totalTime = 0;
 		double totalExpanded = 0;
 		double totalGenerated = 0;
+		String solved_state = "bbbbbbbbb,ooooooooo,yyyyyyyyy,rrrrrrrrr,wwwwwwwww,ggggggggg";
+		RubikWorldState goal_state = new RubikWorldState(goalCube);
 
-		for (int i = 0 ; i < 100; i++) {
+		for (int i = 0 ; i < iterations; i++) {
+			System.out.println("Iteration " + (i + 1));
 			RubikCube initialCube = new RubikCube(solved_state);
-			int shuffle = 7;
 			initialCube.random_shuffle(shuffle);
 			RubikWorldState initial_state = new RubikWorldState(initialCube);
-			SearchNode initialNode = new DepthFirstSearchNode(null, initial_state, null);
-			SearchNode AStarNode = new AStar3DManhattan(null, initial_state, null);
-			ClassicalSearch classical_search = new ClassicalSearch(AStarNode,
-					goal_state, maxNodes, maxDepth, searchType);
+
+			SearchNode initialNode = null;
+			if (algorithm.equals("bfs")) {
+				initialNode = new BreadthFirstSearchNode(null, initial_state, null);
+			}
+			else if (algorithm.equals("dfs")) {
+				initialNode = new DepthFirstSearchNode(null, initial_state, null);
+			}
+			else if (algorithm.equals("as3D")) {
+				initialNode = new AStar3DManhattanImproved(null, initial_state, null);
+			}
+			else if (algorithm.equals("as3Dimproved")) {
+				initialNode = new AStar3DManhattanImproved(null, initial_state, null);
+			}
+
+			// Create the ClassicalSearch object
+			ClassicalSearch classical_search = new ClassicalSearch(initialNode, goal_state, maxNodes, maxDepth, searchType);
+
+			// Start the experiment and record the relevant information
 			long startTime = System.nanoTime();
 			if (classical_search.search()) {
 				System.out.println("Solution found.");
 			} else {
 				System.out.println("No solution found.");
 			}
-			
 			long endTime = System.nanoTime();
-			double timeTaken = ((double) (endTime - startTime)) / 1000000;
+			double timeTaken = ((double) (endTime - startTime)) / 1000000; // calculate the time taken in milliseconds
+
+			// Update the totals
 			totalTime += timeTaken;
 			totalExpanded += classical_search.getExpandedNodes();
 			totalGenerated += classical_search.getGeneratedNodes();
 		}
-		
+
 		System.out.println("Average time taken is " + totalTime / 100);
 		System.out.println("Average number of nodes expanded is " + totalExpanded/100);
 		System.out.println("Average number of nodes generated is " + totalGenerated/100);
-		
-		
-		
-//		long startTime = System.nanoTime();
-//		ClassicalSearch classical_search = new ClassicalSearch(initialNode,
-//				goal_state, maxNodes, maxDepth, searchType);
-//		if (classical_search.search()) {
-//			System.out.println("Solution found.");
-//		} else {
-//			System.out.println("No solution found.");
-//		}
-//		System.out.println("Expanded nodes: " + classical_search.getExpandedNodes());
-//		System.out.println("Generated nodes: " + classical_search.getGeneratedNodes());
-//		
-//		long endTime = System.nanoTime();
-//		double timeTaken = ((double) (endTime - startTime)) / 1000000;
-//		System.out.println("Total time taken: " + timeTaken + " milliseconds");
+	}
+
+	/**
+	 * 
+	 * 
+	 * @param args The command line arguments are: 
+	 * - bfs | dfs | as3D | as3Dimproved : Search algorithm to use
+	 * - tree|graph : Type of search to use
+	 * - numShuffle : Number of random shuffles from a solved cube
+	 * - maxNodes : maximum number of nodes to be expanded
+	 * - maxDepth : maximum depth of the search tree
+	 * - iterations : number of repetitions in the experiment 
+	 */
+	public static void main(String[] args) {
+
 		//////////////////////////////////////////////////////////////////
 		// Process command line arguments
 		//////////////////////////////////////////////////////////////////
-		
-//		if (args.length != 4) {
-//			usage();
-//		}
-//		
-//		RubikWorldState goal_state = new RubikWorldState(goal);
-//
-//		String searchAlgorithm = args[0];
-//		if (searchAlgorithm.equals("bfs")) {
-//			initial_node = new BreadthFirstSearchNode(null, initial_state, null);
-//		} else if (searchAlgorithm.equals("dfs")) {
-//			initial_node = new DepthFirstSearchNode(null, initial_state, null);
-//		} else if (searchAlgorithm.equals("as1")) {
-//			initial_node = new AStarNumTiles(null, initial_state, null, goal_state);
-//			((AStarNumTiles) initial_node).setNumMoves(0);
-//		} else if (searchAlgorithm.equals("as2")) {
-//			initial_node = new AStarManhattan(null, initial_state, null, goal_state);
-//			((AStarManhattan) initial_node).setNumMoves(0);
-//		} else if (searchAlgorithm.equals("ids")) {
-//			throw new RuntimeException("iterative deepening search not implemented yet");
-//		} else {
-//			usage();
-//		}
+		if (args.length != 6) {
+			usage();
+		}
 
-//		String searchTypeString = args[1];
-//		if (searchTypeString.equals("tree")) {
-//			searchType = ClassicalSearch.SearchType.Tree;
-//		} else if (searchTypeString.equals("graph")) {
-//			searchType = ClassicalSearch.SearchType.Graph;
-//		} else {
-//			usage();
-//		}
-//
-//		try {
-//			maxNodes = Integer.parseInt(args[2]);
-//			maxDepth = Integer.parseInt(args[3]);
-//		} catch (NumberFormatException e) {
-//			usage();
-//		}
+		String searchAlgorithm = args[0];
+		String searchTypeString = args[1];
+		int numShuffle = 0;
+		int maxNodes = -1;
+		int maxDepth = -1;
+		int iterations = 0;
+		try {
+			numShuffle = Integer.parseInt(args[2]);
+			maxNodes = Integer.parseInt(args[3]);
+			maxDepth = Integer.parseInt(args[4]);
+			iterations = Integer.parseInt(args[5]);
+		} 
+		catch (NumberFormatException e) {
+			usage();
+		}
 
+		ClassicalSearch.SearchType searchType = null;
+		if (searchTypeString.equals("tree")) {
+			searchType = ClassicalSearch.SearchType.Tree;
+		} else if (searchTypeString.equals("graph")) {
+			searchType = ClassicalSearch.SearchType.Graph;
+		} else {
+			usage();
+		}
 
 		//////////////////////////////////////////////////////////////////
-		// Run the search.
+		// Run the experiment.
 		//////////////////////////////////////////////////////////////////
+		experiment(searchAlgorithm, searchType, numShuffle, maxNodes, maxDepth, iterations);
+
+		//////////////////////////////////////////////////////////////////
+		// SOME LEGACY TEST CASES
+		//////////////////////////////////////////////////////////////////
+		// String state1 = "bbybbybby,ooooooooo,yywyywyyw,rrrrrrrrr,wwgwwgwwg,bggbggbgg"; // 1 rotation away
+		// String state2 = "bbbbbbggg,ggwoooooo,ooobyybyy,byyrrrrrr,ywwywwyww,rrrggwggw"; // 2 rotations away
+		// String state3 = "obbbbbbgg,woogoogoo,yooyyyyyy,byyrrrrrr,wwwwwwrww,rrgggbggb"; // 3 rotations away
+		// String state4 = "bbbbbbbbb,rrrooorrr,gggyyyggg,ooorrrooo,wwwwwwwww,yyygggyyy"; // 4 rotations away
+		// String state5 = "bbyobyoby,owwwoogoo,yywbywbyw,rrrrrgrrg,ywgywgrrw,bggoggobb"; // 5 rotations away
+		// String state6 = "rryybywyy,yoooobogy,gwwyyowww,rrbgrwrbr,oogrwggwg,obbrgbbgb"; // 6 rotations away, looking very shuffled
+		// String state7 = "ggrbbryyw,bywrooroo,rrgbywbyo,rbbrroywo,ywwywgbbg,yoowggwgg";
+		// String stateU = "gyyorooyo,bggwyrybg,wrywworbg,byrbgowgy,brrgowwrw,bbowbyrgo"; // <unknown> rotations away
 	}
 }

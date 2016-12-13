@@ -1,12 +1,13 @@
 /**
- * An AStarManhattan object represents a node in a search tree, in which
- * A* search is used using the Manhattan (or city block) heuristic.
+ * An AStar3DManhattanImproved object represents a node in a search tree, in which
+ * A* search is used using an improved 3D Manhattan heuristic.
+ * This heuristic is discussed in the following URL:
+ * https://heuristicswiki.wikispaces.com/Rubik%27s+cube
  * 
  * @author Sasha Jouravlev, Lam Nguyen
  * @version December 2016
  */
 public class AStar3DManhattanImproved extends AStarAbstract {
-
 	/**
 	 * @param parent
 	 * @param state
@@ -22,11 +23,13 @@ public class AStar3DManhattanImproved extends AStarAbstract {
 
 		// set the cost for this node: the number of moves it took to get to this state + the heuristic
 		cost = this.getNumMoves() + this.findHeuristics(state);
-		//System.out.println(cost);
 	}
 
 	/**
-	 * Returns the 3D Manhattan heuristic for the current node
+	 * This method calculates the total 3D Manhattan distances from the edge squares to their correct locations, 
+	 * calculates the total 3D Manhattan distances from the corner squares to their correct locations,
+	 * then takes the maximum of the two total,
+	 * and finally divides the result by 4 to give the heuristic
 	 */
 	@Override
 	public double findHeuristics(WorldState current) { 
@@ -72,7 +75,7 @@ public class AStar3DManhattanImproved extends AStarAbstract {
 	// Helper function
 	// Calculate the 3D Manhattan distance from the square at the up-front edge
 	// to its correct location and orientation
-	// These numbers were found manually and might be sub-optimal
+	// These numbers were found manually
 	public static int manhattan_edge(RubikCube cube) {
 		String color1 = cube.getColor("up", 8);
 		String color2 = cube.getColor("front", 2);
@@ -187,7 +190,7 @@ public class AStar3DManhattanImproved extends AStarAbstract {
 	// Helper function
 	// Calculate the 3D Manhattan distance from the square at the up-left-front corner
 	// to its correct location and orientation
-	// These numbers were found manually and might be sub-optimal
+	// These numbers were found manually
 	public static int manhattan_corner(RubikCube cube) {
 		String color1 = cube.getColor("up", 7);
 		String color2 = cube.getColor("left", 3);

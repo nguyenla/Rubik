@@ -1,6 +1,6 @@
 /**
- * An AStarManhattan object represents a node in a search tree, in which
- * A* search is used using the Manhattan (or city block) heuristic.
+ * An AStar3DManhattan object represents a node in a search tree, in which
+ * A* search is used using the 3D Manhattan heuristic.
  * 
  * @author Sasha Jouravlev, Lam Nguyen
  * @version December 2016
@@ -16,17 +16,22 @@ public class AStar3DManhattan extends AStarAbstract {
 		super(parent, state, action);
 
 		// if this isn't the root of the tree, set the number of moves to the parent's number plus 1
-		if (parent!=null) {
+		if (parent != null) {
 			this.setNumMoves(((AStar3DManhattan)parent).getNumMoves() + 1);
 		}
 
 		// set the cost for this node: the number of moves it took to get to this state + the heuristic
 		cost = this.getNumMoves() + this.findHeuristics(state);
-		//System.out.println(cost);
 	}
 
 	/**
 	 * Returns the 3D Manhattan heuristic for the current node
+	 * This method calculates the total 3D Manhattan distances 
+	 * from the 12 edge squares to their correct locations and orientations
+	 * and from the 8 corner squares to their correct locations and orientations
+	 * 
+	 * The total distance is divided by 8 to give an admissible heuristic, 
+	 * because each rotation changes the positions of 4 corner squares and 4 edge squares 
 	 */
 	@Override
 	public double findHeuristics(WorldState current) { 
@@ -55,7 +60,7 @@ public class AStar3DManhattan extends AStarAbstract {
 		cube.rotateCubeLeft();
 		cube.rotateCubeDown();
 		
-		return (totalEdge + totalCorner) / 8;
+		return (totalEdge + totalCorner) / 8; // make the heuristic admissible
 	}
 
 	/**
@@ -72,7 +77,7 @@ public class AStar3DManhattan extends AStarAbstract {
 	// Helper function
 	// Calculate the 3D Manhattan distance from the square at the up-front edge
 	// to its correct location and orientation
-	// These numbers were found manually and might be sub-optimal
+	// These numbers were found manually
 	public static int manhattan_edge(RubikCube cube) {
 		String color1 = cube.getColor("up", 8);
 		String color2 = cube.getColor("front", 2);
@@ -187,7 +192,7 @@ public class AStar3DManhattan extends AStarAbstract {
 	// Helper function
 	// Calculate the 3D Manhattan distance from the square at the up-left-front corner
 	// to its correct location and orientation
-	// These numbers were found manually and might be sub-optimal
+	// These numbers were found manually
 	public static int manhattan_corner(RubikCube cube) {
 		String color1 = cube.getColor("up", 7);
 		String color2 = cube.getColor("left", 3);

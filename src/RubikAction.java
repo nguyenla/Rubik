@@ -1,15 +1,15 @@
 /**
- * An EightsPuzzleAction object represents an action in a search tree for
+ * A RubikAction object represents an action in a search tree for
  * RubikCube problems.
  * 
  * @author Lam Nguyen, Sasha Jouravlev
- * @author John MacCormick, Dickinson College
+ * @author some code copied from Professor John MacCormick, used with permission.
  * @version December 2016
  */
 public class RubikAction extends Action {
 
 	/**
-	 * The directions in which the cube can be rotated
+	 * The 12 directions in which the cube can be rotated
 	 */
 	public enum Direction {
 		UpClockwise, UpAntiClockwise, DownClockwise, DownAntiClockwise,
@@ -21,18 +21,15 @@ public class RubikAction extends Action {
 	private Direction direction;
 
 	/**
-	 * Create a new EightsPuzzleAction representing a move in a given direction.
-	 * 
-	 * @param direction
-	 *            The direction in which a tile is moved to perform this action.
+	 * Create a new RubikAction representing a move in a given direction.
 	 */
 	public RubikAction(Direction direction) {
 		super();
 		this.direction = direction;
 	}
 
-	/** Returns the direction in which a tile is moved to perform this action.
-	 * @return The direction in which a tile is moved to perform this action.
+	/** Returns the direction in which the cube is rotated to perform this action
+	 * @return The direction in which the cube is rotated to perform this action
 	 */
 	public Direction getDirection() {
 		return direction;

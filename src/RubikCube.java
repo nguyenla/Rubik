@@ -10,9 +10,9 @@ public class RubikCube {
 	private String right;
 	private String front;
 	private String back;
-	private int move;
+	private int move; // this field is only used in the Simple_solver class
 
-	// Constructor to initialize the orientation of a rubik cube to an arbitrary state
+	// Constructor to initialize the orientation of a Rubik cube to an arbitrary state
 	public RubikCube(String initial) {
 		move = 0;
 		if (initial.length() == 59) {
@@ -44,7 +44,7 @@ public class RubikCube {
 		move = 0;
 	}
 
-	// return the corresponding face
+	// return the corresponding face of the cube
 	public String getFace(String face) {
 		if (face.equals("up")) {
 			return up;
@@ -66,7 +66,9 @@ public class RubikCube {
 		}
 	}
 
-	// Helper method: Rotate clockwise
+	// Helper method: Rotate a face clockwise
+	// The parameter given to this method is a String representation of a face 
+	// (9 characters representing the colors of 9 squares on that face)
 	public static String rotateClockwise(String state) {
 		StringBuilder res = new StringBuilder("");
 		res.append(state.charAt(6));
@@ -82,6 +84,8 @@ public class RubikCube {
 	}
 
 	// Helper method: Rotate anticlockwise
+	// The parameter given to this method is a String representation of a face 
+	// (9 characters representing the colors of 9 squares on that face)
 	public static String rotateAntiClockwise(String state) {
 		StringBuilder res = new StringBuilder("");
 		res.append(state.charAt(2));
@@ -96,12 +100,16 @@ public class RubikCube {
 		return res.toString();
 	}
 
+	// Helper method: replace a String at a specified index with a given character
 	public static String replaceAtIndex(String original, int index, char replacement) {
 		return original.substring(0, index) + replacement + original.substring(index + 1);
 	}
 
-	// A very sophisticated method to execute a simple task
-	// *** Need better comment ***
+	/* Helper method used to implement the 12 rotations 
+	 * More specifically, this method takes in 4 String representations of 4 faces of the cube,
+	 * and 4 integers codes representing which cubes of each corresponding face to move to another face
+	 * The method might seem complicated, but the task executed is simple.
+	 */
 	public static String[] permute(String s1, String s2, String s3, String s4,
 			int loc1, int loc2, int loc3, int loc4) {
 		String[] res = new String[4];
@@ -285,7 +293,10 @@ public class RubikCube {
 		move++;
 	}
 
-	// Helper method: Print the rubik cube
+	// Helper method: Print the rubik cube in the following format:
+	// Up
+	// Left Front Right Back
+	// Down
 	public void print() {
 		System.out.println("Current state:");
 		System.out.println("    " + up.substring(0, 3));
@@ -304,7 +315,7 @@ public class RubikCube {
 		System.out.println();
 	}
 
-	// Helper method: get the color at a specific position
+	// Helper method: get the color at the specified position in the specified face 
 	public String getColor(String face, int pos) {
 		String temp = getState();
 		String[] states = temp.split(",");
@@ -339,7 +350,7 @@ public class RubikCube {
 		}
 	}
 
-	// This method rotates the whole cube to the right
+	// This method rotates the whole cube to the right, so that the front face becomes the right face
 	public void rotateCubeRight() {
 		String temp = front;
 		front = left;
@@ -350,7 +361,7 @@ public class RubikCube {
 		down = rotateClockwise(down);
 	}
 
-	// This method rotates the whole cube to the left
+	// This method rotates the whole cube to the left, so that the front face becomes the left face
 	public void rotateCubeLeft() {
 		String temp = front;
 		front = right;
@@ -387,7 +398,7 @@ public class RubikCube {
 	public boolean check_square(String face, int pos) {
 		return getColor(face, pos).equals(getColor(face, 5));
 	}
-	
+
 	// This method randomly shuffles the RubikCube by the specified number of moves
 	public void random_shuffle(int moves) {
 		Random generator = new Random();
