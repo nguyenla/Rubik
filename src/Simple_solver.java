@@ -613,11 +613,19 @@ public class Simple_solver {
 	//	String state = "wbrwbrboo,goororgog,ygbgywrbw,gbbrrbyyw,borywwwwy,yyoggyogr";
 //		String state = "gyyorooyo,bggwyrybg,wrywworbg,byrbgowgy,brrgowwrw,bbowbyrgo";
 		String state5 = "rryybywyy,yoooobogy,gwwyyowww,rrbgrwrbr,oogrwggwg,obbrgbbgb";
+//		Simple_solver solver2 = new Simple_solver(state5);
+//		System.out.println("Initial state:");
+//		solver2.printState();
+//		solver2.solve();
+//		solver2.printState();
+//		System.out.println(solver2.getCube().getMove());
 		Simple_solver solver2 = new Simple_solver(state5);
-		System.out.println("Initial state:");
-		solver2.printState();
+		long startTime = System.nanoTime();
 		solver2.solve();
-		solver2.printState();
+		
+		long endTime = System.nanoTime();
+		double timeTaken = ((double) (endTime - startTime)) / 1000000;
+		System.out.println(timeTaken);
 		System.out.println(solver2.getCube().getMove());
 	}
 }

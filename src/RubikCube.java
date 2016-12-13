@@ -383,7 +383,6 @@ public class RubikCube {
 		right = rotateAntiClockwise(right);
 	}
 
-
 	// Check of a specific square matches the color of the face it is on
 	public boolean check_square(String face, int pos) {
 		return getColor(face, pos).equals(getColor(face, 5));

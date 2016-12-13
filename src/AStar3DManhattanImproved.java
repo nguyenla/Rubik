@@ -5,19 +5,19 @@
  * @author Sasha Jouravlev, Lam Nguyen
  * @version December 2016
  */
-public class AStar3DManhattan extends AStarAbstract {
+public class AStar3DManhattanImproved extends AStarAbstract {
 
 	/**
 	 * @param parent
 	 * @param state
 	 * @param action
 	 */
-	public AStar3DManhattan(SearchNode parent, WorldState state, Action action) {
+	public AStar3DManhattanImproved(SearchNode parent, WorldState state, Action action) {
 		super(parent, state, action);
 
 		// if this isn't the root of the tree, set the number of moves to the parent's number plus 1
 		if (parent!=null) {
-			this.setNumMoves(((AStar3DManhattan)parent).getNumMoves() + 1);
+			this.setNumMoves(((AStar3DManhattanImproved)parent).getNumMoves() + 1);
 		}
 
 		// set the cost for this node: the number of moves it took to get to this state + the heuristic
@@ -55,7 +55,7 @@ public class AStar3DManhattan extends AStarAbstract {
 		cube.rotateCubeLeft();
 		cube.rotateCubeDown();
 		
-		return (totalEdge + totalCorner) / 8;
+		return Math.max(totalEdge, totalCorner) / 4;
 	}
 
 	/**
@@ -66,7 +66,7 @@ public class AStar3DManhattan extends AStarAbstract {
 	 */
 	@Override
 	protected SearchNode createChild(WorldState childState, Action action) {
-		return new AStar3DManhattan(this, childState, action);
+		return new AStar3DManhattanImproved(this, childState, action);
 	}
 
 	// Helper function

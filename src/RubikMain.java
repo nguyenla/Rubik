@@ -64,11 +64,12 @@ public class RubikMain {
 
 		for (int i = 0 ; i < 100; i++) {
 			RubikCube initialCube = new RubikCube(solved_state);
-			int shuffle = 1;
+			int shuffle = 7;
 			initialCube.random_shuffle(shuffle);
 			RubikWorldState initial_state = new RubikWorldState(initialCube);
 			SearchNode initialNode = new DepthFirstSearchNode(null, initial_state, null);
-			ClassicalSearch classical_search = new ClassicalSearch(initialNode,
+			SearchNode AStarNode = new AStar3DManhattan(null, initial_state, null);
+			ClassicalSearch classical_search = new ClassicalSearch(AStarNode,
 					goal_state, maxNodes, maxDepth, searchType);
 			long startTime = System.nanoTime();
 			if (classical_search.search()) {
@@ -87,9 +88,6 @@ public class RubikMain {
 		System.out.println("Average time taken is " + totalTime / 100);
 		System.out.println("Average number of nodes expanded is " + totalExpanded/100);
 		System.out.println("Average number of nodes generated is " + totalGenerated/100);
-		
-		
-		
 		
 		
 		
