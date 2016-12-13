@@ -187,5 +187,4 @@ public class ClassicalSearch {
 
 		return solutionNode != null;
 	}
-
 }

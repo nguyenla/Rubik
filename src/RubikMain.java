@@ -36,7 +36,7 @@ public class RubikMain {
 		
 		// The goal
 		RubikWorldState goal_state = new RubikWorldState(goalCube);
-		int maxNodes = 2000000;
+		int maxNodes = 200000000;
 		int maxDepth = 20;
 		ClassicalSearch.SearchType searchType = ClassicalSearch.SearchType.Tree;
 		
@@ -44,10 +44,15 @@ public class RubikMain {
 		String state1 = "bbybbybby,ooooooooo,yywyywyyw,rrrrrrrrr,wwgwwgwwg,bggbggbgg"; // 1 rotation away
 		String state2 = "bbbbbbggg,ggwoooooo,ooobyybyy,byyrrrrrr,ywwywwyww,rrrggwggw"; // 2 rotations away
 		String state3 = "obbbbbbgg,woogoogoo,yooyyyyyy,byyrrrrrr,wwwwwwrww,rrgggbggb"; // 3 rotations away
-		String stateU  = "gyyorooyo,bggwyrybg,wrywworbg,byrbgowgy,brrgowwrw,bbowbyrgo"; // <unknown> rotations away
-		RubikCube initialCube = new RubikCube(stateU);
+		String state4 = "bbbbbbbbb,rrrooorrr,gggyyyggg,ooorrrooo,wwwwwwwww,yyygggyyy"; // 4 rotations away
+		String state5 = "bbyobyoby,owwwoogoo,yywbywbyw,rrrrrgrrg,ywgywgrrw,bggoggobb"; // 5 rotations away
+//		String state6 = "rryybywyy,yoooobogy,gwwyyowww,rrbgrwrbr,oogrwggwg,obbrgbbgb"; // 6 rotations away, looking very shuffled
+		String state7 = "ggrbbryyw,bywrooroo,rrgbywbyo,rbbrroywo,ywwywgbbg,yoowggwgg";
+		
+		String stateU = "gyyorooyo,bggwyrybg,wrywworbg,byrbgowgy,brrgowwrw,bbowbyrgo"; // <unknown> rotations away
+		RubikCube initialCube = new RubikCube(state7);
 		RubikWorldState initial_state = new RubikWorldState(initialCube);
-		SearchNode initial_node = new BreadthFirstSearchNode(null, initial_state, null);;
+		SearchNode initial_node = new DepthFirstSearchNode(null, initial_state, null);;
 
 		//////////////////////////////////////////////////////////////////
 		// Process command line arguments
