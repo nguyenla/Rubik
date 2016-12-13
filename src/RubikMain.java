@@ -42,10 +42,10 @@ public class RubikMain {
 			else if (algorithm.equals("dfs")) {
 				initialNode = new DepthFirstSearchNode(null, initial_state, null);
 			}
-			else if (algorithm.equals("as3D")) {
+			else if (algorithm.equals("as3d")) {
 				initialNode = new AStar3DManhattanImproved(null, initial_state, null);
 			}
-			else if (algorithm.equals("as3Dimproved")) {
+			else if (algorithm.equals("as3dim")) {
 				initialNode = new AStar3DManhattanImproved(null, initial_state, null);
 			}
 
@@ -121,7 +121,13 @@ public class RubikMain {
 		//////////////////////////////////////////////////////////////////
 		// Run the experiment.
 		//////////////////////////////////////////////////////////////////
+		try {
 		experiment(searchAlgorithm, searchType, numShuffle, maxNodes, maxDepth, iterations);
+		}
+		catch (Exception e) {
+			System.out.println(e.getMessage());
+			usage();
+		}
 
 		//////////////////////////////////////////////////////////////////
 		// SOME LEGACY TEST CASES
