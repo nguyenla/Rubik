@@ -13,7 +13,7 @@ public class RubikMain {
 
 	private static void usage() {
 		System.out.println("Please specify the following 6 arguments:");
-		System.out.println("The search algorithm to use, which can be: bfs | dfs | as3D | as3Dimproved");
+		System.out.println("The search algorithm to use, which can be: bfs | dfs | as3d | as3dim");
 		System.out.println("Type of search to use, which can be: tree | graph");
 		System.out.println("The number of random shuffles");
 		System.out.println("The maximum number of nodes to be expanded");
